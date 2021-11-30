@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.demo.resy.RegisterController">
    <children>
-      <Button fx:id="register_button" layoutX="213.0" layoutY="273.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="175.0" style="-fx-background-color: #004e9b;" text="Registrieren" textFill="WHITE" />
+      <Button fx:id="register_button" layoutX="213.0" layoutY="273.0" mnemonicParsing="false" onMouseClicked="#register_User" prefHeight="35.0" prefWidth="175.0" style="-fx-background-color: #004e9b;" text="Registrieren" textFill="WHITE" />
       <TextField fx:id="email" layoutX="213.0" layoutY="149.0" prefHeight="35.0" prefWidth="175.0" promptText="max.mustermann@cascade.de" />
       <PasswordField fx:id="password" layoutX="213.0" layoutY="217.0" prefHeight="35.0" prefWidth="175.0" />
       <Label layoutX="213.0" layoutY="132.0" text="E-Mail">

@@ -2,15 +2,13 @@ package com.demo.resy;
 
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.IOException;
 
 
 public class MainController {
@@ -30,17 +28,17 @@ public class MainController {
     @FXML
     void popup_login(MouseEvent event) {
 
-        try{
+        try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
-            Parent root1 = (Parent) fxmlLoader.load();
+            Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Cascade - Login");
             stage.setScene(new Scene(root1));
             stage.show();
 
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
+            //TODO: Java Log
             System.out.println("Cant load new Window");
         }
 
@@ -49,17 +47,17 @@ public class MainController {
     @FXML
     void popup_register(MouseEvent event) {
 
-        try{
+        try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("register.fxml"));
-            Parent root1 = (Parent) fxmlLoader.load();
+            Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Cascade - Registrierung");
             stage.setScene(new Scene(root1));
             stage.show();
 
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
+            //TODO: JavaLog
             System.out.println("Cant load new Window");
         }
 

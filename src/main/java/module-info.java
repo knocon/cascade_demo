@@ -2,7 +2,9 @@ module com.demo.resy {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
-
+    requires java.sql;
+    requires org.apache.logging.log4j;
+    requires org.apache.logging.log4j.core;
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires validatorfx;
