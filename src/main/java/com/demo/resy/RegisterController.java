@@ -10,6 +10,8 @@ import java.sql.SQLException;
 
 public class RegisterController {
 
+    //TODO: Label, der entsprechende Fehler wirft, ob Username, Email oder Passwort fehlerhaft ist.
+
 
     @FXML
     private TextField email;

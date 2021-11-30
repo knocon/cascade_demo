@@ -38,7 +38,6 @@ public class MainController {
 
 
         } catch (Exception e) {
-            //TODO: Java Log
             System.out.println("Cant load new Window");
         }
 
@@ -57,7 +56,6 @@ public class MainController {
 
 
         } catch (Exception e) {
-            //TODO: JavaLog
             System.out.println("Cant load new Window");
         }
 

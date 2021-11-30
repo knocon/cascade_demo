@@ -19,7 +19,6 @@ public class Database {
     public void initializeConnection() {
         System.out.println("DB Connection starting...");
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
-            //TODO: java Log
             System.out.println("DB Connection successful!");
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
