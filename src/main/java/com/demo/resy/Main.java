@@ -22,9 +22,6 @@ public class Main extends Application {
 
     public static void main(String[] args) throws SQLException {
         Database cascade_db = new Database("jdbc:mysql://localhost:3306/cascade_db?", "root", "");
-
-        User newUser = new User("test", "test", "test");
-        Database.insert_User(newUser);
         System.out.println("Java-FX Launch pending...");
         launch();
         System.out.println("Java-FX Launch successful!");

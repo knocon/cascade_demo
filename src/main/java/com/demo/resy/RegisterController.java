@@ -42,8 +42,11 @@ public class RegisterController {
 
         if (string_username != "" && string_email != "" && string_password != "") {
             User newUser = new User(string_username, string_email, string_password);
-
-                Database.insert_User(newUser);
+                if(Database.checkDuplicateonEmail(newUser)==false){
+                    Database.insert_User(newUser);
+                    System.out.print("Duplicates not found. Import done.");
+                }
+                else System.out.print("Duplicates found. Import not possible.");
 
 
         }

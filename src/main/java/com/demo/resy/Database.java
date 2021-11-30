@@ -29,7 +29,7 @@ public class Database {
     public static void insert_User(User user) throws SQLException {
         System.out.println("Insert User starting...");
         Connection conn = createConnection();
-        PreparedStatement ps = conn.prepareStatement("insert into user (Username, Email, Password) values(?,?,?)");
+        PreparedStatement ps = conn.prepareStatement("INSERT into user (Username,Email,Password) values(?,?,?)");
         ps.setString(1, user.getUsername());
         ps.setString(2, user.getEmail());
         ps.setString(3, user.getPassword());
