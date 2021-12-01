@@ -1,15 +1,16 @@
 package com.demo.resy;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.sql.SQLException;
 
 public class LoginController {
+
+
+    //TODO: Fenster sperren & schließen.
+    //TODO: Feedback-Elemente.
 
     @FXML
     private Label forgot_password;
@@ -30,8 +31,21 @@ public class LoginController {
         try {
             Database.login(Database.getUser(email_string,password_string));
             System.out.println("Login successfull.");
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information!");
+            alert.setHeaderText("Login successfull!");
+            alert.setContentText("You are now logged in as: "+Database.getUser(email_string,password_string).getUsername());
+            alert.showAndWait();
+
+
         } catch (NullPointerException e) {
             System.out.println("Login-Failed.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Information!");
+            alert.setHeaderText("Login failed!");
+            alert.setContentText("Wrong login data.");
+            alert.showAndWait();
         }
 
     }

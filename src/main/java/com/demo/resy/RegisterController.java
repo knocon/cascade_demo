@@ -10,9 +10,10 @@ import java.sql.SQLException;
 
 public class RegisterController {
 
-    //TODO: Label, der entsprechende Fehler wirft, ob Username, Email oder Passwort fehlerhaft ist.
+    //TODO: Feedback-Elemente.
     //TODO: Regex
     //TODO: Passwort hash
+    //TODO: Fenster sperren & schließen.
 
 
     @FXML
