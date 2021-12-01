@@ -67,19 +67,38 @@ public class Database {
 
     public static boolean login(User user) throws SQLException {
         Connection conn = createConnection();
-        PreparedStatement statement = conn.prepareStatement("SELECT * FROM user WHERE Email ='"+user.getEmail()+"' AND Password ='"+user.getPassword()+"'");
-        ResultSet rS = statement.executeQuery("SELECT * FROM user WHERE Email ='"+user.getEmail()+"' AND Password ='"+user.getPassword()+"'");
-        if(rS.next()){
+        PreparedStatement statement = conn.prepareStatement("SELECT * FROM user WHERE Email ='" + user.getEmail() + "' AND Password ='" + user.getPassword() + "'");
+        ResultSet rS = statement.executeQuery("SELECT * FROM user WHERE Email ='" + user.getEmail() + "' AND Password ='" + user.getPassword() + "'");
+        if (rS.next()) {
             rS.close();
             statement.close();
             conn.close();
+            System.out.println("Found user and logged in. Closing connection.");
             return true;
-        }
-        else{
+        } else {
             rS.close();
             statement.close();
             conn.close();
-            return false;}
+            System.out.println("Couldn't handle login. Closing connection.");
+            return false;
+        }
+    }
+
+    public static User getUser(String email, String password) throws SQLException {
+        Connection conn = createConnection();
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user WHERE Email ='" + email + "' AND Password ='" + password + "'");
+        ResultSet rS = stmt.executeQuery("SELECT * FROM user WHERE Email ='" + email + "' AND Password ='" + password + "'");
+        if (rS.next()) {
+            String username=rS.getString("Username");
+            User user = new User(username, email, password);
+            System.out.println("Found user. Returning User.");
+            return user;
+        } else {
+            System.out.println("Couldn't get user. Returning null.");
+            return null;
+        }
+
+
     }
 
 

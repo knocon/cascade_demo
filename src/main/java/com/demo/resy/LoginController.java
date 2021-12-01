@@ -7,6 +7,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
+import java.sql.SQLException;
+
 public class LoginController {
 
     @FXML
@@ -22,11 +24,15 @@ public class LoginController {
     private TextField email;
 
     @FXML
-    void login(MouseEvent event) {
-        String email_string = email.toString();
-        String password_string = password.toString();
-
-
+    void login(MouseEvent event) throws SQLException {
+        String email_string = email.getText().toString();
+        String password_string = password.getText().toString();
+        try {
+            Database.login(Database.getUser(email_string,password_string));
+            System.out.println("Login successfull.");
+        } catch (NullPointerException e) {
+            System.out.println("Login-Failed.");
+        }
 
     }
 
