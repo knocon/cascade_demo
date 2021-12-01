@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 
 public class LoginController {
 
@@ -19,5 +20,14 @@ public class LoginController {
 
     @FXML
     private TextField email;
+
+    @FXML
+    void login(MouseEvent event) {
+        String email_string = email.toString();
+        String password_string = password.toString();
+
+
+
+    }
 
 }

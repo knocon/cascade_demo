@@ -65,5 +65,22 @@ public class Database {
         }
     }
 
+    public static boolean login(User user) throws SQLException {
+        Connection conn = createConnection();
+        PreparedStatement statement = conn.prepareStatement("SELECT * FROM user WHERE Email ='"+user.getEmail()+"' AND Password ='"+user.getPassword()+"'");
+        ResultSet rS = statement.executeQuery("SELECT * FROM user WHERE Email ='"+user.getEmail()+"' AND Password ='"+user.getPassword()+"'");
+        if(rS.next()){
+            rS.close();
+            statement.close();
+            conn.close();
+            return true;
+        }
+        else{
+            rS.close();
+            statement.close();
+            conn.close();
+            return false;}
+    }
+
 
 }

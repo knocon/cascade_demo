@@ -11,6 +11,8 @@ import java.sql.SQLException;
 public class RegisterController {
 
     //TODO: Label, der entsprechende Fehler wirft, ob Username, Email oder Passwort fehlerhaft ist.
+    //TODO: Regex
+    //TODO: Passwort hash
 
 
     @FXML
@@ -44,11 +46,10 @@ public class RegisterController {
 
         if (string_username != "" && string_email != "" && string_password != "") {
             User newUser = new User(string_username, string_email, string_password);
-                if(Database.checkDuplicateonEmail(newUser)==false){
-                    Database.insert_User(newUser);
-                    System.out.print("Duplicates not found. Import done.");
-                }
-                else System.out.print("Duplicates found. Import not possible.");
+            if (Database.checkDuplicateonEmail(newUser) == false) {
+                Database.insert_User(newUser);
+                System.out.print("Duplicates not found. Import done.");
+            } else System.out.print("Duplicates found. Import not possible.");
 
 
         }
