@@ -6,11 +6,13 @@ import javafx.scene.input.MouseEvent;
 
 import java.sql.SQLException;
 
+import static com.demo.resy.Main.*;
+
 public class LoginController {
 
 
     //TODO: Fenster sperren & schließen.
-    //TODO: Feedback-Elemente.
+
 
     @FXML
     private Label forgot_password;
@@ -25,29 +27,24 @@ public class LoginController {
     private TextField email;
 
     @FXML
+    private TextField username;
+
+    @FXML
     void login(MouseEvent event) throws SQLException {
         String email_string = email.getText().toString();
         String password_string = password.getText().toString();
-        try {
-            Database.login(Database.getUser(email_string,password_string));
-            System.out.println("Login successfull.");
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information!");
-            alert.setHeaderText("Login successfull!");
-            alert.setContentText("You are now logged in as: "+Database.getUser(email_string,password_string).getUsername());
-            alert.showAndWait();
+        String username_string = username.getText().toString();
 
 
-        } catch (NullPointerException e) {
-            System.out.println("Login-Failed.");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Information!");
-            alert.setHeaderText("Login failed!");
-            alert.setContentText("Wrong login data.");
-            alert.showAndWait();
-        }
+        if (neoDbObject.loginUser(username_string, email_string, password_string)[0]==true) {
+            System.out.println("User found. Logged in.");
+            activeUser.setUsername(username_string);
+            activeUser.setEmail(email_string);
+            activeUser.setPassword(password_string);
+            logStatus = true;
 
-    }
 
-}
+        } else System.out.println("User not found. Login failed.");
+
+
+    }}

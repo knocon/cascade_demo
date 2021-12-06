@@ -28,7 +28,7 @@ public class Database {
     public static void insert_User(User user) throws SQLException {
         System.out.println("Insert User starting...");
         Connection conn = createConnection();
-        PreparedStatement ps = conn.prepareStatement("INSERT into user (Username,Email,Password) values(?,?,?)");
+        PreparedStatement ps = conn.prepareStatement("INSERT into users (Username,Email,Password) values(?,?,?)");
         ps.setString(1, user.getUsername());
         ps.setString(2, user.getEmail());
         ps.setString(3, user.getPassword());
@@ -48,8 +48,8 @@ public class Database {
 
     public static boolean checkDuplicateonEmail(User user) throws SQLException {
         Connection conn = createConnection();
-        PreparedStatement statement = conn.prepareStatement("SELECT * from user WHERE Email = '" + user.getEmail() + "'");
-        ResultSet rS = statement.executeQuery("SELECT * from user WHERE Email = '" + user.getEmail() + "'");
+        PreparedStatement statement = conn.prepareStatement("SELECT * from users WHERE Email = '" + user.getEmail() + "'");
+        ResultSet rS = statement.executeQuery("SELECT * from users WHERE Email = '" + user.getEmail() + "'");
         if (!rS.next()) {
             System.out.print("Check: Duplicates not found!");
             rS.close();
@@ -67,8 +67,8 @@ public class Database {
 
     public static boolean login(User user) throws SQLException {
         Connection conn = createConnection();
-        PreparedStatement statement = conn.prepareStatement("SELECT * FROM user WHERE Email ='" + user.getEmail() + "' AND Password ='" + user.getPassword() + "'");
-        ResultSet rS = statement.executeQuery("SELECT * FROM user WHERE Email ='" + user.getEmail() + "' AND Password ='" + user.getPassword() + "'");
+        PreparedStatement statement = conn.prepareStatement("SELECT * FROM users WHERE Email ='" + user.getEmail() + "' AND Password ='" + user.getPassword() + "'");
+        ResultSet rS = statement.executeQuery("SELECT * FROM users WHERE Email ='" + user.getEmail() + "' AND Password ='" + user.getPassword() + "'");
         if (rS.next()) {
             rS.close();
             statement.close();
@@ -86,8 +86,8 @@ public class Database {
 
     public static User getUser(String email, String password) throws SQLException {
         Connection conn = createConnection();
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user WHERE Email ='" + email + "' AND Password ='" + password + "'");
-        ResultSet rS = stmt.executeQuery("SELECT * FROM user WHERE Email ='" + email + "' AND Password ='" + password + "'");
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE Email ='" + email + "' AND Password ='" + password + "'");
+        ResultSet rS = stmt.executeQuery("SELECT * FROM users WHERE Email ='" + email + "' AND Password ='" + password + "'");
         if (rS.next()) {
             String username=rS.getString("Username");
             User user = new User(username, email, password);

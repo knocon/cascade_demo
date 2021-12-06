@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.neo4j.driver.Config;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,9 +20,26 @@ public class Main extends Application {
         stage.show();
     }
 
+    public static String db_uri="neo4j+s://94c89272.databases.neo4j.io";
+    public static String db_user="neo4j";
+    public static String db_pw="TwrZkJZ7UXqLmRYsytRGU0iJEVGo6o9OGhDqLPiiHOU";
+    public static neoDB neoDbObject = new neoDB(db_uri, db_user, db_pw, Config.defaultConfig());
+    public static User activeUser = new User("","","");
+    public static boolean logStatus = false;
 
     public static void main(String[] args) throws SQLException {
         Database cascade_db = new Database("jdbc:mysql://localhost:3306/cascade_db?", "root", "");
+
+        String uri = "neo4j+s://94c89272.databases.neo4j.io";
+        String user = "neo4j";
+        String password = "TwrZkJZ7UXqLmRYsytRGU0iJEVGo6o9OGhDqLPiiHOU";
+
+        try (neoDB cc_db = new neoDB(uri, user, password, Config.defaultConfig())){
+            System.out.print("Connection neo4j");
+            //cc_db.printGreeting("Person");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.out.println("Java-FX Launch pending...");
         launch();
         System.out.println("Java-FX Launch successful!");

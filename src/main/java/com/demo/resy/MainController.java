@@ -7,6 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -24,6 +26,14 @@ public class MainController {
 
     @FXML
     private Button suchen_button;
+
+
+    Image image = new Image("C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\logo_uni_siegen.png");
+
+    @FXML
+    private ImageView imageView = new ImageView();
+
+
 
     @FXML
     void popup_login(MouseEvent event) {
@@ -60,5 +70,11 @@ public class MainController {
         }
 
     }
+
+    @FXML
+    void popup_konto(MouseEvent event) {
+
+    }
+
 
 }

@@ -11,6 +11,7 @@ module com.demo.resy {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires org.neo4j.driver;
 
     opens com.demo.resy to javafx.fxml;
     exports com.demo.resy;
