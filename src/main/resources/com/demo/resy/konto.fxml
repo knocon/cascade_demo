@@ -11,10 +11,10 @@
 
 <AnchorPane prefHeight="671.0" prefWidth="1234.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.demo.resy.KontoController">
    <children>
-      <TextField layoutX="73.0" layoutY="63.0" promptText="Nutzername" text="username" />
-      <TextField layoutX="73.0" layoutY="133.0" promptText="Email" />
-      <PasswordField layoutX="73.0" layoutY="98.0" promptText="Passwort" />
-      <Button layoutX="113.0" layoutY="171.0" mnemonicParsing="false" style="-fx-background-color: #004e9b;" text="Speichern" textFill="WHITE" />
+      <TextField editable="false" layoutX="73.0" layoutY="63.0" promptText="Nutzername" />
+      <TextField editable="false" layoutX="73.0" layoutY="133.0" promptText="Email" />
+      <PasswordField editable="false" layoutX="73.0" layoutY="98.0" promptText="Passwort" />
+      <Button disable="true" layoutX="113.0" layoutY="171.0" mnemonicParsing="false" style="-fx-background-color: #004e9b;" text="Speichern" textFill="WHITE" />
       <Text layoutX="60.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nutzerinformationen anpassen" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="12.0" />

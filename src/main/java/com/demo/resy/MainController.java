@@ -1,6 +1,7 @@
 package com.demo.resy;
 
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +11,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import static com.demo.resy.Main.*;
 
 
 public class MainController {
@@ -27,12 +31,17 @@ public class MainController {
     @FXML
     private Button suchen_button;
 
-
-    Image image = new Image("C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\logo_uni_siegen.png");
+    @FXML
+    private Button kontoeinstellungen;
 
     @FXML
-    private ImageView imageView = new ImageView();
+    private ImageView imageViewAura;
 
+    @FXML
+    private ImageView imageView;
+
+    @FXML
+    private ImageView cascade_logo;
 
 
     @FXML
@@ -42,6 +51,8 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.getIcons().add(new Image("file:C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\ca.png"));
             stage.setTitle("Cascade - Login");
             stage.setScene(new Scene(root1));
             stage.show();
@@ -60,6 +71,8 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("register.fxml"));
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.getIcons().add(new Image("file:C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\ca.png"));
             stage.setTitle("Cascade - Registrierung");
             stage.setScene(new Scene(root1));
             stage.show();

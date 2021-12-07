@@ -6,10 +6,20 @@ import java.util.logging.Logger;
 
 //CYPHER
 
-//CONSTRAINTS
+//DELETE ALL
+//MATCH (n) DETACH DELETE n
+
+//CONSTRAINTS & CREATION USER
+//CREATE (n:User {username: '', email: '', password: ''})"
+
 //CREATE CONSTRAINT ON (n:User) ASSERT n.username IS UNIQUE
 //CREATE CONSTRAINT ON (n:User) ASSERT n.email IS UNIQUE
 //CREATE CONSTRAINT ON (n:User) ASSERT n.id IS UNIQUE
+
+
+//CONSTRAINTS & CREATION SKILLS
+//CREATE (n:Skill {skillname: '', description: '', category:''})
+
 
 public class neoDB implements AutoCloseable {
     private static final Logger LOGGER = Logger.getLogger(neoDB.class.getName());
@@ -31,11 +41,11 @@ public class neoDB implements AutoCloseable {
         driver.close();
     }
 
-    public static Driver Connection(){
+    public static Driver Connection() {
         String uri = "neo4j+s://94c89272.databases.neo4j.io";
         String user = "neo4j";
         String password = "TwrZkJZ7UXqLmRYsytRGU0iJEVGo6o9OGhDqLPiiHOU";
-        try (neoDB db = new neoDB(uri, user, password, Config.defaultConfig())){
+        try (neoDB db = new neoDB(uri, user, password, Config.defaultConfig())) {
             System.out.print("session");
             return db.getDriver();
         } catch (Exception e) {
@@ -64,25 +74,24 @@ public class neoDB implements AutoCloseable {
             String registerUser = session.writeTransaction(new TransactionWork<String>() {
                 @Override
                 public String execute(Transaction transaction) {
-                    Result result = transaction.run("CREATE (n:User {username: '"+username+"', email: '"+email+"', password: '"+password+"'})");
+                    Result result = transaction.run("CREATE (n:User {username: '" + username + "', email: '" + email + "', password: '" + password + "'})");
                     return null;
                 }
             });
         }
     }
 
-    public boolean[] loginUser(final String username, final String email, final String password){
+    public boolean[] loginUser(final String username, final String email, final String password) {
         final boolean[] r = new boolean[1];
-        try(Session session = driver.session()){
+        try (Session session = driver.session()) {
             String loginUser = session.writeTransaction(new TransactionWork<String>() {
                 @Override
                 public String execute(Transaction transaction) {
-                    Result result = transaction.run("MATCH (n:User {username:'"+username+"', email:'"+email+"', password:'"+password+"'})\n" +
+                    Result result = transaction.run("MATCH (n:User {username:'" + username + "', email:'" + email + "', password:'" + password + "'})\n" +
                             "RETURN (n:User)");
-                    if(result.hasNext()){
+                    if (result.hasNext()) {
                         r[0] = true;
-                    }
-                    else r[0] = false;
+                    } else r[0] = false;
                     return String.valueOf(result);
                 }
             });
@@ -90,7 +99,6 @@ public class neoDB implements AutoCloseable {
         }
         return r;
     }
-
 
 
 }

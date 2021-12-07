@@ -20,11 +20,11 @@ public class RegisterController {
     //TODO: Passwort hash
     //TODO: Fenster sperren & schließen.
 
-    private neoDB dbSession(){
+    private neoDB dbSession() {
         String uri = "neo4j+s://94c89272.databases.neo4j.io";
         String user = "neo4j";
         String password = "TwrZkJZ7UXqLmRYsytRGU0iJEVGo6o9OGhDqLPiiHOU";
-        try (neoDB db = new neoDB(uri, user, password, Config.defaultConfig())){
+        try (neoDB db = new neoDB(uri, user, password, Config.defaultConfig())) {
             System.out.print("session");
             return db;
         } catch (Exception e) {
@@ -82,15 +82,15 @@ public class RegisterController {
         if (string_username != "" && string_email != "" && string_password != "") {
             User newUser = new User(string_username, string_email, string_password);
 
-            try{
+            try {
                 neoDbObject.registerUser(newUser);
                 System.out.print("STATUS neoDB: new User created.");
-            }catch(ClientException ce){
+            } catch (ClientException ce) {
                 System.out.print("STATUS neoDB: new User NOT created.");
             }
 
 
+        }
 
     }
-
-}}
+}

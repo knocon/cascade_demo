@@ -89,7 +89,7 @@ public class Database {
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE Email ='" + email + "' AND Password ='" + password + "'");
         ResultSet rS = stmt.executeQuery("SELECT * FROM users WHERE Email ='" + email + "' AND Password ='" + password + "'");
         if (rS.next()) {
-            String username=rS.getString("Username");
+            String username = rS.getString("Username");
             User user = new User(username, email, password);
             System.out.println("Found user. Returning User.");
             return user;
