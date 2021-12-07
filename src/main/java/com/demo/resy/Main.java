@@ -35,6 +35,7 @@ public class Main extends Application {
         stage.setTitle("Cascade - Wissensgraph-basierendes Empfehlungssystem");
         stage.setScene(scene);
         stage.getIcons().add(new Image("file:C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\ca.png"));
+        stage.setResizable(false);
         stage.show();
 
 

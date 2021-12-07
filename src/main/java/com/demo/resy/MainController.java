@@ -54,6 +54,7 @@ public class MainController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.getIcons().add(new Image("file:C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\ca.png"));
             stage.setTitle("Cascade - Login");
+            stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();
 
@@ -74,6 +75,7 @@ public class MainController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.getIcons().add(new Image("file:C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\ca.png"));
             stage.setTitle("Cascade - Registrierung");
+            stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();
 
@@ -86,6 +88,27 @@ public class MainController {
 
     @FXML
     void popup_konto(MouseEvent event) {
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("konto.fxml"));
+            Parent root1 = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.getIcons().add(new Image("file:C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\ca.png"));
+            stage.setTitle("Cascade - Kontoeinstellungen");
+            stage.setResizable(false);
+            stage.setScene(new Scene(root1));
+            KontoController kontoController = fxmlLoader.getController();
+            kontoController.setLogStatusText();
+            kontoController.setEmail();
+            kontoController.setUsername();
+            kontoController.setPasswordField();
+            stage.show();
+
+
+        } catch (Exception e) {
+            System.out.println("Cant load new Window");
+        }
 
     }
 
