@@ -1,13 +1,19 @@
 package com.demo.resy;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
-public class KontoController {
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import static com.demo.resy.Main.neoDbObject;
+
+public class KontoController implements Initializable {
 
     @FXML
     private TextField email;
@@ -34,7 +40,13 @@ public class KontoController {
     private Button save;
 
     @FXML
-    private TableView<?> skills_table;
+    private TableView<Skill> skills_table;
+
+    @FXML
+    private TableColumn<Skill, String> skills_column;
+
+    @FXML
+    private TableView<?> skills_table2;
 
     @FXML
     private TextField username;
@@ -43,4 +55,14 @@ public class KontoController {
         username.setText(Main.activeUser.getUsername());
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        neoDbObject.fillTable2();
+        System.out.println("OMEGALUL");
+        //skills_column.setCellValueFactory(new PropertyValueFactory<Skill, String>("skillname"));
+        //skills_table.getItems().setAll(parseSkillList());
+    }
+
+    @FXML
+    private Button parseButton;
 }

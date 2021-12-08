@@ -56,7 +56,8 @@ public class Main extends Application {
             e.printStackTrace();
         }
         System.out.println("Java-FX Launch pending...");
-
+        neoDbObject.readSkills();
+        neoDbObject.fillTable2();
         launch();
 
         System.out.println("Java-FX Launch successful!");

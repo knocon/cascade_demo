@@ -23,8 +23,13 @@
       <Text fx:id="logStatusText" layoutX="1105.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sie sind eingeloggt als:" />
       <TableView fx:id="skills_table" layoutX="313.0" layoutY="32.0" prefHeight="612.0" prefWidth="248.0">
         <columns>
-          <TableColumn editable="false" prefWidth="248.0" resizable="false" text="Kenntnisse und Fähigkeiten" />
+          <TableColumn fx:id="skills_column" editable="false" prefWidth="248.0" resizable="false" text="Skills in DB" />
         </columns>
+      </TableView>
+      <TableView fx:id="skills_table2" layoutX="736.0" layoutY="32.0" prefHeight="612.0" prefWidth="248.0">
+         <columns>
+            <TableColumn editable="false" prefWidth="248.0" resizable="false" text="Skills in User" />
+         </columns>
       </TableView>
    </children>
 </AnchorPane>

@@ -1,8 +1,14 @@
 package com.demo.resy;
 
 import org.neo4j.driver.*;
+import org.neo4j.driver.Record;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
+
+import static org.neo4j.driver.Values.parameters;
 
 //CYPHER
 
@@ -41,6 +47,10 @@ public class neoDB implements AutoCloseable {
         driver.close();
     }
 
+    /**
+     * Driver Connection.
+     * @return
+     */
     public static Driver Connection() {
         String uri = "neo4j+s://94c89272.databases.neo4j.io";
         String user = "neo4j";
@@ -54,6 +64,10 @@ public class neoDB implements AutoCloseable {
         }
     }
 
+    /**
+     * Unnötiger Code.
+     * @param Person
+     */
     public void printGreeting(final String Person) {
         try (Session session = driver.session()) {
             String greeting = session.writeTransaction(new TransactionWork<String>() {
@@ -66,6 +80,10 @@ public class neoDB implements AutoCloseable {
         }
     }
 
+    /**
+     * Registriert einen User.
+     * @param user
+     */
     public void registerUser(final User user) {
         try (Session session = driver.session()) {
             final String username = user.getUsername();
@@ -81,6 +99,14 @@ public class neoDB implements AutoCloseable {
         }
     }
 
+    /**
+     *
+     * @param username
+     * @param email
+     * @param password
+     * @return Login successfull when result.hasNext().
+     *          Andernfalls Login fail.
+     */
     public boolean[] loginUser(final String username, final String email, final String password) {
         final boolean[] r = new boolean[1];
         try (Session session = driver.session()) {
@@ -101,4 +127,105 @@ public class neoDB implements AutoCloseable {
     }
 
 
+
+
+    /**
+     * Folgender Code nur zum probieren & testen..
+     */
+
+    /**
+     *
+     * @param String: name
+     * Leichte Version eines Imports in neo4j. Ohne Transaction!!
+     */
+    public void addPerson(String name) {
+        try (Session session = driver.session()) {
+            session.run("CREATE (a:Person {name: $name})", parameters("name", name));
+        }
+    }
+
+
+    /**
+     * Mögliche Lösung für Results.
+     *
+     *
+     * @return List<Record>
+     * @param Benötigt eine Hilfsmethode, um die List<Record> zu erzeugen.
+     */
+
+    public void readSkills() {
+        try (Session session = driver.session()) {
+            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result skillname = transaction.run("MATCH(n:Skill) RETURN(n)");
+                    return hilfsMethode(transaction);
+                }
+            });
+            System.out.println(puffer);
+        }
+    }
+
+    private static List<Record> hilfsMethode(Transaction tx) {
+        return tx.run("MATCH (n:Skill) RETURN (n)").list();
+    }
+
+    /**
+     * Probably Müll.
+     */
+    public void fillTable() {
+
+        try (Session session = driver.session()) {
+            String receiveDatas = session.writeTransaction(new TransactionWork<String>() {
+                @Override
+                public String execute(Transaction transaction) {
+                    Result result = transaction.run("MATCH (n:Skill) RETURN (n)");
+
+                    return String.valueOf(result);
+
+                }
+            });
+            System.out.println(receiveDatas);
+        }
+
+
+    }
+
+    /**
+     * Probably Müll
+     * Read&Write Code.
+     * @return
+     */
+    public int fillTable2() {
+
+        try (Session session = driver.session()) {
+            int skillcount = 0;
+            List<Record> skills = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    return matchPersonNodes(transaction);
+                }
+            });
+
+            for (final Record Skill : skills) {
+
+                skillcount += session.writeTransaction(new TransactionWork<Integer>() {
+                    @Override
+                    public Integer execute(Transaction transaction) {
+                        transaction.run("MATCH (n:Skill) RETURN (n)");
+                        return 1;
+                    }
+                });
+
+            }
+            System.out.println(skillcount);
+            return skillcount;
+        }
+
+
+    }
+
+    private static List<Record> matchPersonNodes(Transaction tx) {
+        return tx.run("MATCH (n:Skill) RETURN (n)").list();
+    }
 }
