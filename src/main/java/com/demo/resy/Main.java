@@ -1,6 +1,8 @@
 package com.demo.resy;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -9,6 +11,8 @@ import org.neo4j.driver.Config;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Main extends Application {
@@ -17,6 +21,8 @@ public class Main extends Application {
     public static String db_pw = "TwrZkJZ7UXqLmRYsytRGU0iJEVGo6o9OGhDqLPiiHOU";
     public static neoDB neoDbObject = new neoDB(db_uri, db_user, db_pw, Config.defaultConfig());
     public static User activeUser = new User("", "", "");
+    public static ObservableList<Skill> skillsList = FXCollections.observableArrayList();
+
 
     public static boolean isLogStatus() {
         return logStatus;
@@ -55,11 +61,10 @@ public class Main extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Java-FX Launch pending...");
-        neoDbObject.readSkills();
-        neoDbObject.fillTable2();
-        launch();
 
+
+        System.out.println("Java-FX Launch pending...");
+        launch();
         System.out.println("Java-FX Launch successful!");
     }
 }

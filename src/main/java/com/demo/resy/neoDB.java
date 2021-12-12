@@ -3,6 +3,7 @@ package com.demo.resy;
 import org.neo4j.driver.*;
 import org.neo4j.driver.Record;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +30,6 @@ import static org.neo4j.driver.Values.parameters;
 
 public class neoDB implements AutoCloseable {
     private static final Logger LOGGER = Logger.getLogger(neoDB.class.getName());
-
-    public Driver getDriver() {
-        return driver;
-    }
-
     private final Driver driver;
 
     public neoDB(String uri, String user, String password, Config config) {
@@ -41,14 +37,9 @@ public class neoDB implements AutoCloseable {
         driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password), config);
     }
 
-    @Override
-    public void close() throws Exception {
-        // The driver object should be closed before the application ends.
-        driver.close();
-    }
-
     /**
      * Driver Connection.
+     *
      * @return
      */
     public static Driver Connection() {
@@ -65,23 +56,27 @@ public class neoDB implements AutoCloseable {
     }
 
     /**
-     * Unnötiger Code.
-     * @param Person
+     * @param tx
+     * @return List<Record>
      */
-    public void printGreeting(final String Person) {
-        try (Session session = driver.session()) {
-            String greeting = session.writeTransaction(new TransactionWork<String>() {
-                @Override
-                public String execute(Transaction transaction) {
-                    Result result = transaction.run("CREATE (n:message)");
-                    return null;
-                }
-            });
-        }
+    private static List<Record> hilfsMethode(Transaction tx) {
+        return tx.run("MATCH(n:Skill)\n" +
+                "RETURN id(n), n.skillname, n.description, n.category").list();
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    @Override
+    public void close() throws Exception {
+        // The driver object should be closed before the application ends.
+        driver.close();
     }
 
     /**
      * Registriert einen User.
+     *
      * @param user
      */
     public void registerUser(final User user) {
@@ -100,12 +95,11 @@ public class neoDB implements AutoCloseable {
     }
 
     /**
-     *
      * @param username
      * @param email
      * @param password
      * @return Login successfull when result.hasNext().
-     *          Andernfalls Login fail.
+     * Andernfalls Login fail.
      */
     public boolean[] loginUser(final String username, final String email, final String password) {
         final boolean[] r = new boolean[1];
@@ -126,7 +120,34 @@ public class neoDB implements AutoCloseable {
         return r;
     }
 
+    /**
+     * Mögliche Lösung für Results.
+     *
+     * @param
+     * @return List<Record>
+     */
 
+    public void readSkills() {
+        Main.skillsList.removeAll(Main.skillsList);
+        try (Session session = driver.session()) {
+            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result skillname = transaction.run("MATCH(n:Skill)\n" +
+                            "RETURN id(n), n.skillname, n.description, n.category");
+                    return hilfsMethode(transaction);
+                }
+            });
+
+            for (Record item : puffer) {
+                Map<String, Object> map = item.asMap();
+                Skill s = new Skill((String) map.get("n.skillname"), (String) map.get("n.description"), (String) map.get("n.category"));
+                Main.skillsList.add(s);
+            }
+
+
+        }
+    }
 
 
     /**
@@ -135,8 +156,6 @@ public class neoDB implements AutoCloseable {
 
     /**
      *
-     * @param String: name
-     * Leichte Version eines Imports in neo4j. Ohne Transaction!!
      */
     public void addPerson(String name) {
         try (Session session = driver.session()) {
@@ -145,87 +164,4 @@ public class neoDB implements AutoCloseable {
     }
 
 
-    /**
-     * Mögliche Lösung für Results.
-     *
-     *
-     * @return List<Record>
-     * @param Benötigt eine Hilfsmethode, um die List<Record> zu erzeugen.
-     */
-
-    public void readSkills() {
-        try (Session session = driver.session()) {
-            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
-                @Override
-                public List<Record> execute(Transaction transaction) {
-                    Result skillname = transaction.run("MATCH(n:Skill) RETURN(n)");
-                    return hilfsMethode(transaction);
-                }
-            });
-            System.out.println(puffer);
-        }
-    }
-
-    private static List<Record> hilfsMethode(Transaction tx) {
-        return tx.run("MATCH (n:Skill) RETURN (n)").list();
-    }
-
-    /**
-     * Probably Müll.
-     */
-    public void fillTable() {
-
-        try (Session session = driver.session()) {
-            String receiveDatas = session.writeTransaction(new TransactionWork<String>() {
-                @Override
-                public String execute(Transaction transaction) {
-                    Result result = transaction.run("MATCH (n:Skill) RETURN (n)");
-
-                    return String.valueOf(result);
-
-                }
-            });
-            System.out.println(receiveDatas);
-        }
-
-
-    }
-
-    /**
-     * Probably Müll
-     * Read&Write Code.
-     * @return
-     */
-    public int fillTable2() {
-
-        try (Session session = driver.session()) {
-            int skillcount = 0;
-            List<Record> skills = session.readTransaction(new TransactionWork<List<Record>>() {
-                @Override
-                public List<Record> execute(Transaction transaction) {
-                    return matchPersonNodes(transaction);
-                }
-            });
-
-            for (final Record Skill : skills) {
-
-                skillcount += session.writeTransaction(new TransactionWork<Integer>() {
-                    @Override
-                    public Integer execute(Transaction transaction) {
-                        transaction.run("MATCH (n:Skill) RETURN (n)");
-                        return 1;
-                    }
-                });
-
-            }
-            System.out.println(skillcount);
-            return skillcount;
-        }
-
-
-    }
-
-    private static List<Record> matchPersonNodes(Transaction tx) {
-        return tx.run("MATCH (n:Skill) RETURN (n)").list();
-    }
 }
