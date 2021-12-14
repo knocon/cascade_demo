@@ -22,6 +22,7 @@ public class Main extends Application {
     public static neoDB neoDbObject = new neoDB(db_uri, db_user, db_pw, Config.defaultConfig());
     public static User activeUser = new User("", "", "");
     public static ObservableList<Skill> skillsList = FXCollections.observableArrayList();
+    public static ObservableList<Skill> userSkillsList = FXCollections.observableArrayList();
 
 
     public static boolean isLogStatus() {

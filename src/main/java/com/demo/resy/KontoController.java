@@ -5,17 +5,20 @@ import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.demo.resy.Main.neoDbObject;
-import static com.demo.resy.Main.skillsList;
+import static com.demo.resy.Main.*;
 
 public class KontoController implements Initializable {
 
@@ -36,13 +39,30 @@ public class KontoController implements Initializable {
     @FXML
     private TableColumn<Skill, String> description_column;
     @FXML
-    private TableView<?> skills_table2;
+    private TableView<Skill> skillsuser_table;
+    @FXML
+    private TableColumn<Skill, String> skills_column2;
+    @FXML
+    private TableColumn<Skill, String> category_column2;
+    @FXML
+    private TableColumn<Skill, String> description_column2;
     @FXML
     private TextField username;
     @FXML
     private TextField filter;
     @FXML
+    private TextField filter2;
+    @FXML
     private Button parseButton;
+
+    @FXML
+    private Button addButton;
+
+    @FXML
+    private Button delButton;
+
+    @FXML
+    private Button fetchData;
 
     public void setEmail() {
         email.setText(Main.activeUser.getEmail());
@@ -91,5 +111,97 @@ public class KontoController implements Initializable {
         SortedList<Skill> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(skills_table.comparatorProperty());
         skills_table.setItems(sortedData);
+
+        /**
+         * First table above
+         * Second table below
+         */
+        neoDbObject.readUserSkills();
+        skills_column2.setCellValueFactory(new PropertyValueFactory<Skill, String>("skillname"));
+        category_column2.setCellValueFactory(new PropertyValueFactory<Skill, String>("category"));
+        description_column2.setCellValueFactory(new PropertyValueFactory<Skill, String>("description"));
+        skillsuser_table.getItems().setAll(userSkillsList);
+
+        FilteredList<Skill> filteredData2 = new FilteredList<>(userSkillsList, p -> true);
+        filter2.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData2.setPredicate(skill -> {
+
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (skill.getSkillname().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (skill.getCategory().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+        });
+
+        SortedList<Skill> sortedData2 = new SortedList<>(filteredData2);
+        sortedData2.comparatorProperty().bind(skillsuser_table.comparatorProperty());
+        skillsuser_table.setItems(sortedData2);
+
+
     }
+
+    @FXML
+    void addSkill(MouseEvent event) {
+
+        try {
+            Skill skill = skills_table.getSelectionModel().getSelectedItem();
+            System.out.println(skill.getSkillname());
+            neoDbObject.createSkillRelationship(activeUser, skill.getSkillname());
+            refresh(event);
+        } catch (Exception npe) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Information!");
+            alert.setHeaderText("Missing information!");
+            alert.setContentText("Please select a row!");
+            alert.showAndWait();
+        }
+
+    }
+
+    @FXML
+    void delSkill(MouseEvent event) {
+        try {
+            Skill skill = skillsuser_table.getSelectionModel().getSelectedItem();
+            System.out.println(skill.getSkillname());
+            neoDbObject.deleteSkillUserRelationships(activeUser, skill.getSkillname());
+            refresh(event);
+        } catch (Exception npe) {
+            npe.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Information!");
+            alert.setHeaderText("Missing information!");
+            alert.setContentText("Please select a row!");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    void refresh(MouseEvent event) {
+        neoDbObject.readSkills();
+        skills_column.setCellValueFactory(new PropertyValueFactory<Skill, String>("skillname"));
+        category_column.setCellValueFactory(new PropertyValueFactory<Skill, String>("category"));
+        description_column.setCellValueFactory(new PropertyValueFactory<Skill, String>("description"));
+        skills_table.setItems(skillsList);
+        /**
+         * First table above
+         * Second table below
+         */
+        neoDbObject.readUserSkills();
+        skills_column2.setCellValueFactory(new PropertyValueFactory<Skill, String>("skillname"));
+        category_column2.setCellValueFactory(new PropertyValueFactory<Skill, String>("category"));
+        description_column2.setCellValueFactory(new PropertyValueFactory<Skill, String>("description"));
+        skillsuser_table.setItems(userSkillsList);
+
+
+    }
+
 }

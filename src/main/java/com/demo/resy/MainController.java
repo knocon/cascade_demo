@@ -43,6 +43,9 @@ public class MainController {
     @FXML
     private ImageView cascade_logo;
 
+    @FXML
+    private ImageView wp;
+
 
     @FXML
     void popup_login(MouseEvent event) {

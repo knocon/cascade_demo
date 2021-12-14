@@ -22,7 +22,7 @@
       <TextField fx:id="email" editable="false" layoutX="14.0" layoutY="145.0" promptText="Email" />
       <Button fx:id="save" disable="true" layoutX="14.0" layoutY="214.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: #004e9b;" text="Speichern" textFill="WHITE" />
       <Text fx:id="logStatusText" layoutX="12.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sie sind eingeloggt als:" />
-      <TableView fx:id="skills_table" layoutX="201.0" layoutY="57.0" prefHeight="364.0" prefWidth="745.0">
+      <TableView fx:id="skills_table" layoutX="201.0" layoutY="47.0" prefHeight="364.0" prefWidth="745.0">
         <columns>
           <TableColumn fx:id="skills_column" editable="false" prefWidth="248.0" resizable="false" text="Skillname" />
             <TableColumn fx:id="category_column" editable="false" prefWidth="248.0" resizable="false" text="Kategorie" />
@@ -30,6 +30,25 @@
         </columns>
       </TableView>
       <Separator layoutX="177.0" layoutY="4.0" orientation="VERTICAL" prefHeight="665.0" prefWidth="5.0" />
-      <TextField fx:id="filter" layoutX="201.0" layoutY="31.0" prefHeight="25.0" prefWidth="249.0" promptText="Tabelle filtern nach Skillnamen" />
+      <TextField fx:id="filter" layoutX="201.0" layoutY="21.0" prefHeight="25.0" prefWidth="249.0" promptText="Tabelle filtern nach Skillnamen" />
+      <Button fx:id="addButton" layoutX="864.0" layoutY="20.0" mnemonicParsing="false" onMouseClicked="#addSkill" style="-fx-background-color: #99ff99;" text="Hinzufügen">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Button fx:id="delButton" layoutX="884.0" layoutY="428.0" mnemonicParsing="false" onMouseClicked="#delSkill" style="-fx-background-color: ff9999;" text="Löschen">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <TableView fx:id="skillsuser_table" layoutX="201.0" layoutY="455.0" prefHeight="207.0" prefWidth="745.0">
+         <columns>
+            <TableColumn fx:id="skills_column2" editable="false" prefWidth="248.0" resizable="false" text="Skillname" />
+            <TableColumn fx:id="category_column2" editable="false" prefWidth="248.0" resizable="false" text="Kategorie" />
+            <TableColumn fx:id="description_column2" editable="false" prefWidth="248.0" resizable="false" text="Beschreibung" />
+         </columns>
+      </TableView>
+      <TextField fx:id="filter2" layoutX="201.0" layoutY="429.0" prefHeight="25.0" prefWidth="249.0" promptText="Tabelle filtern nach Skillnamen" />
+      <Button fx:id="fetchData" layoutX="1020.0" layoutY="48.0" mnemonicParsing="false" onMouseClicked="#refresh" prefHeight="48.0" prefWidth="149.0" text="fetch data" />
    </children>
 </AnchorPane>

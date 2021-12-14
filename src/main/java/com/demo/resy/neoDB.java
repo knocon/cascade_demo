@@ -27,6 +27,22 @@ import static org.neo4j.driver.Values.parameters;
 //CONSTRAINTS & CREATION SKILLS
 //CREATE (n:Skill {skillname: '', description: '', category:''})
 
+//TODO:CONSTRAINTS
+
+
+//RELATIONSHIPS
+//MATCH (u:User{username:'root'}), (s:Skill{skillname:'php'})
+//WHERE NOT (u)-[:has_skill]->(s)
+//CREATE (u)-[rsu:has_skill]->(s)
+//CREATE (s)-[rus:has_user]->(u)
+//RETURN type(rsu)
+
+
+//DELETE RELATIONSHIPS
+//MATCH(s:Skill{skillname:'php'})-[r:has_user]-(u:User{username:'root'})
+//DELETE r
+//MATCH(s:Skill{skillname:'php'})-[r:has_skill]-(u:User{username:'root'})
+//DELETE r
 
 public class neoDB implements AutoCloseable {
     private static final Logger LOGGER = Logger.getLogger(neoDB.class.getName());
@@ -64,6 +80,16 @@ public class neoDB implements AutoCloseable {
                 "RETURN id(n), n.skillname, n.description, n.category").list();
     }
 
+    /**
+     * @param tx
+     * @return List<Record>
+     */
+    private static List<Record> hilfsMethodeUserSkills(Transaction tx) {
+        String username = Main.activeUser.getUsername();
+        return tx.run("MATCH(u:User{username:'"+username+"'})-[r:has_skill]->(s:Skill)\n" +
+                "RETURN s.skillname, s.description, s.category").list();
+    }
+
     public Driver getDriver() {
         return driver;
     }
@@ -88,6 +114,61 @@ public class neoDB implements AutoCloseable {
                 @Override
                 public String execute(Transaction transaction) {
                     Result result = transaction.run("CREATE (n:User {username: '" + username + "', email: '" + email + "', password: '" + password + "'})");
+                    return null;
+                }
+            });
+        }
+    }
+
+    /**
+     * Erstellt eine Beziehung zwischen dem Nutzer und einem Skill.
+     * @param activeUser
+     * @param selectedSkill
+     */
+    public void createSkillRelationship(final User activeUser, final String selectedSkill){
+        try(Session session = driver.session()){
+            final String username = activeUser.getUsername();
+            final String skill = selectedSkill;
+            String registerUser = session.writeTransaction(new TransactionWork<String>() {
+                @Override
+                public String execute(Transaction transaction) {
+                    Result result = transaction.run("\n" +
+                            "MATCH (u:User{username:'"+username+"'}), (s:Skill{skillname:'"+skill+"'})\n" +
+                            "WHERE NOT (u)-[:has_skill]->(s)\n" +
+                            "CREATE (u)-[rsu:has_skill]->(s)\n" +
+                            "CREATE (s)-[rus:has_user]->(u)\n" +
+                            "RETURN type(rsu) ");
+                    return null;
+                }
+            });
+        }
+
+    }
+
+    public void deleteSkillUserRelationships(final User activeUser, final String selectedSkill){
+        try(Session session = driver.session()){
+            final String username = activeUser.getUsername();
+            final String skill = selectedSkill;
+            String registerUser = session.writeTransaction(new TransactionWork<String>() {
+                @Override
+                public String execute(Transaction transaction) {
+                    Result result = transaction.run("\n" +
+                            "MATCH(s:Skill{skillname:'"+skill+"'})-[r:has_user]-(u:User{username:'"+username+"'})\n" +
+                            "DELETE r");
+                    return null;
+                }
+            });
+        }
+
+        try(Session session = driver.session()){
+            final String username = activeUser.getUsername();
+            final String skill = selectedSkill;
+            String registerUser = session.writeTransaction(new TransactionWork<String>() {
+                @Override
+                public String execute(Transaction transaction) {
+                    Result result = transaction.run("\n" +
+                            "MATCH(s:Skill{skillname:'"+skill+"'})-[r:has_skill]-(u:User{username:'"+username+"'})\n" +
+                            "DELETE r");
                     return null;
                 }
             });
@@ -143,6 +224,29 @@ public class neoDB implements AutoCloseable {
                 Map<String, Object> map = item.asMap();
                 Skill s = new Skill((String) map.get("n.skillname"), (String) map.get("n.description"), (String) map.get("n.category"));
                 Main.skillsList.add(s);
+            }
+
+
+        }
+    }
+
+    public void readUserSkills() {
+        Main.userSkillsList.removeAll(Main.userSkillsList);
+        String username = Main.activeUser.getUsername();
+        try (Session session = driver.session()) {
+            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result result = transaction.run("MATCH(u:User{username:'"+username+"'})-[r:has_skill]->(s:Skill)\n" +
+                            "RETURN s.skillname, s.description, s.category");
+                    return hilfsMethodeUserSkills(transaction);
+                }
+            });
+
+            for (Record item : puffer) {
+                Map<String, Object> map = item.asMap();
+                Skill s = new Skill((String) map.get("s.skillname"), (String) map.get("s.description"), (String) map.get("s.category"));
+                Main.userSkillsList.add(s);
             }
 
 
