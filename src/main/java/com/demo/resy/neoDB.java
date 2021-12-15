@@ -1,10 +1,10 @@
 package com.demo.resy;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.neo4j.driver.*;
 import org.neo4j.driver.Record;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -23,11 +23,13 @@ import static org.neo4j.driver.Values.parameters;
 //CREATE CONSTRAINT ON (n:User) ASSERT n.email IS UNIQUE
 //CREATE CONSTRAINT ON (n:User) ASSERT n.id IS UNIQUE
 
+//CONSTRAINTS & CREATION JOB
+//CREATE (j:Job {jobname: '', description: '', durationOfactivity: ''})"
+
+
 
 //CONSTRAINTS & CREATION SKILLS
 //CREATE (n:Skill {skillname: '', description: '', category:''})
-
-//TODO:CONSTRAINTS
 
 
 //RELATIONSHIPS
@@ -80,6 +82,17 @@ public class neoDB implements AutoCloseable {
                 "RETURN id(n), n.skillname, n.description, n.category").list();
     }
 
+    private static List<Record> hilfsMethodeJobs(Transaction tx) {
+        return tx.run("MATCH(j:Job)\n" +
+                "RETURN id(j), j.categories, j.companyname, j.durationOfactivity, j.email, j.jobdescription, j.jobname, j.jobskills, j.name, j.vorname").list();
+    }
+
+    private static List<Record> hilfsMethodeUnwind(Transaction tx, Record rec) {
+        return tx.run("MATCH(j:Job{jobname:"+rec.get("j.jobname")+"})\n" +
+                "UNWIND j.jobskills AS js\n" +
+                "RETURN DISTINCT js").list();
+    }
+
     /**
      * @param tx
      * @return List<Record>
@@ -88,6 +101,12 @@ public class neoDB implements AutoCloseable {
         String username = Main.activeUser.getUsername();
         return tx.run("MATCH(u:User{username:'"+username+"'})-[r:has_skill]->(s:Skill)\n" +
                 "RETURN s.skillname, s.description, s.category").list();
+    }
+
+    private static List<Record> hilfsMethodeSkillCategorys(Transaction tx) {
+        String username = Main.activeUser.getUsername();
+        return tx.run("MATCH(s:Skill)\n" +
+                "RETURN DISTINCT s.category").list();
     }
 
     public Driver getDriver() {
@@ -118,6 +137,46 @@ public class neoDB implements AutoCloseable {
                 }
             });
         }
+    }
+
+    public void createOffer(final Job input) {
+        try (Session session = driver.session()) {
+            final String jn = input.getJobname();
+            final String dur = input.getDurationOfactivity();
+            final String area = input.getJobdescription();
+            final ObservableList<String> skills_selected = input.getJobskills();
+            final ObservableList<String> categorys_selected = input.getCategorys();
+            final String un = input.getCompanyname();
+            final String na = input.getName();
+            final String vn = input.getVorname();
+            final String em = input.getEmail();
+            final String tel = input.getTelnr();
+            final String str = input.getStrnr();
+            final String plz = input.getPlzort();
+            String registerUser = session.writeTransaction(new TransactionWork<String>() {
+                @Override
+                public String execute(Transaction transaction){
+                    Result result = transaction.run("CREATE (j:Job {jobname: '"+input.getJobname()+"', durationOfactivity: '"+input.getDurationOfactivity()+"', jobdescription: '"+input.getJobdescription()+"', jobskills:["+returnList(input.getJobskills())+"], categories:["+returnList(input.getCategorys())+"], companyname:'"+input.getCompanyname()+"', name:'"+input.getName()+"', vorname:'"+input.getVorname()+"', email:'"+input.getEmail()+"', telnr:'"+input.getTelnr()+"', strnr:'"+input.getStrnr()+"', plzort:'"+input.getPlzort()+"'})");
+                    System.out.println("Job Created");
+                    return null;
+
+                }
+            });
+        }
+    }
+
+    public String returnList(ObservableList<String> input){
+        String outputstring = "";
+        int size = input.size();
+        for(int i=0;i<size;i++) {
+            if(i<size-1)outputstring+="'"+input.get(i)+"', ";
+            else outputstring+="'"+input.get(i)+"'";
+
+
+
+        }
+
+        return outputstring;
     }
 
     /**
@@ -230,6 +289,65 @@ public class neoDB implements AutoCloseable {
         }
     }
 
+    public void readJobs() {
+        Main.jobList.removeAll(Main.jobList);
+        try (Session session = driver.session()) {
+            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result job = transaction.run("MATCH(j:Job)\n" +
+                            "RETURN id(j), j.categories, j.companyname, j.durationOfactivity, j.email, j.jobdescription, j.jobname, j.jobskills, j.name, j.vorname");
+                    return hilfsMethodeJobs(transaction);
+                }
+            });
+
+            for (Record item : puffer) {
+               // System.out.println(item.get("j.jobskills").get(0));
+
+
+                final String jid = item.get("id(j)").toString();
+                final String jn = item.get("j.jobname").toString();
+                final String dur = item.get("j.durationOfactivity").toString();
+                final String area = item.get("j.jobdescription").toString();
+                final String un = item.get("j.companyname").toString();
+                final String na =item.get("j.jobname").toString();
+                final String vn =item.get("j.name").toString();
+                final String em =item.get("j.vorname").toString();
+                final String tel =item.get("j.email").toString();
+                final String str =item.get("j.jobname").toString();
+                final String plz =item.get("j.jobname").toString();
+                /*Hoher Performance-Fresser. AlternativLösung dringend nötig.*/
+                //Job j = new Job(jn, dur, area, unwind(item), unwind(item), un, na, vn, em , tel, str, plz);
+                Job j = new Job(jn, dur, area, null, null, un, na, vn, em , tel, str, plz);
+                j.setJobid(jid);
+                Main.jobList.add(j);
+            }
+
+
+        }
+    }
+
+    public ObservableList<String> unwind(Record rec) {
+        ObservableList<String> output = FXCollections.observableArrayList();
+        try (Session session = driver.session()) {
+            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result job = transaction.run("MATCH(j:Job{jobname:"+rec.get("j.jobname")+"})\n" +
+                            "UNWIND j.jobskills AS js\n" +
+                            "RETURN DISTINCT js");
+                    return hilfsMethodeUnwind(transaction, rec);
+                }
+            });
+            for(Record item : puffer){
+                output.add(item.get("js").toString());
+            }
+            return output;
+
+
+        }
+    }
+
     public void readUserSkills() {
         Main.userSkillsList.removeAll(Main.userSkillsList);
         String username = Main.activeUser.getUsername();
@@ -250,6 +368,25 @@ public class neoDB implements AutoCloseable {
             }
 
 
+        }
+    }
+
+    public void returnCategories(){
+        Main.skillCategorys.removeAll(Main.skillCategorys);
+        try(Session session = driver.session()){
+            List<Record> results = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result result = transaction.run("MATCH(s:Skill) RETURN DISTINCT s.category");
+                    return hilfsMethodeSkillCategorys(transaction);
+                }
+            });
+
+            for(Record item : results){
+                Map<String, Object> map = item.asMap();
+                Main.skillCategorys.add(map.get("s.category").toString());
+                System.out.println(map.get("s.category").toString());
+            }
         }
     }
 

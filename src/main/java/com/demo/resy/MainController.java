@@ -115,5 +115,27 @@ public class MainController {
 
     }
 
+    @FXML
+    void popup_jobs(MouseEvent event) {
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("jobverwaltung.fxml"));
+            Parent root1 = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.getIcons().add(new Image("file:C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\ca.png"));
+            stage.setTitle("Cascade - Jobverwaltung");
+            stage.setResizable(false);
+            stage.setScene(new Scene(root1));
+            stage.show();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Cant load new Window");
+        }
+
+    }
+
 
 }

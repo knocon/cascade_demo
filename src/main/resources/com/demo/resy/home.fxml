@@ -34,5 +34,6 @@
             <Image url="@ca2.png" />
          </image>
       </ImageView>
+      <Button fx:id="jobverwaltung" layoutX="1069.0" layoutY="65.0" mnemonicParsing="false" onMouseClicked="#popup_jobs" prefHeight="25.0" prefWidth="150.0" text="Jobverwaltung" />
    </children>
 </Pane>
