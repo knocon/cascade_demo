@@ -16,9 +16,6 @@ import static com.demo.resy.Main.neoDbObject;
 public class RegisterController {
 
 
-    //TODO: Regex
-    //TODO: Passwort hash
-    //TODO: Fenster sperren & schließen.
 
     private neoDB dbSession() {
         String uri = "neo4j+s://94c89272.databases.neo4j.io";

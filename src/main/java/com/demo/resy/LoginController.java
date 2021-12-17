@@ -12,7 +12,7 @@ import static com.demo.resy.Main.*;
 public class LoginController {
 
 
-    //TODO: Fenster sperren & schließen.
+
 
 
     @FXML
@@ -46,6 +46,12 @@ public class LoginController {
 
             Stage stage = (Stage) login_button.getScene().getWindow();
             stage.close();
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation!");
+            alert.setHeaderText("Important information!");
+            alert.setContentText("Logged in.");
+            alert.showAndWait();
 
 
         } else System.out.println("User not found. Login failed.");

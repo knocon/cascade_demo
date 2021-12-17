@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class JobCreationController implements Initializable {
+    //TODO: Categorys fixen. Sobald Jobdatenbestand 0 => EXCEPTION
 
     @FXML
     private TextField companyname;
@@ -28,6 +29,7 @@ public class JobCreationController implements Initializable {
 
     @FXML
     private TextField email;
+
 
     @FXML
     private TextField jobname;
@@ -53,6 +55,7 @@ public class JobCreationController implements Initializable {
     @FXML
     private TextField vorname;
 
+
     @FXML
     void createOffer(MouseEvent event) {
 
@@ -69,19 +72,37 @@ public class JobCreationController implements Initializable {
         final String str = streetnr.getText();
         final String plz = plzort.getText();
 
-        Job newJob = new Job(jn, dur, area, skills_selected, categorys_selected, un, na, vn, em , tel , str, plz);
-        Main.neoDbObject.createOffer(newJob);
+        if(jn!="" && dur!="" && area!="" && un!="" && na!="" && vn!="" && em!="" && tel!="" && str!="" && plz!="" &&skills_selected.size()>0 && categorys_selected.size()>0 ){
+            Job newJob = new Job(jn, dur, area, skills_selected, categorys_selected, un, na, vn, em , tel , str, plz);
+            Main.neoDbObject.createOffer(newJob);
+            Main.neoDbObject.createOfferRelationship(newJob);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation!");
+            alert.setHeaderText("Important information!");
+            alert.setContentText("Done.");
+            alert.showAndWait();
+        }
+        else{Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Information!");
+            alert.setHeaderText("Missing information!");
+            alert.setContentText("Missing data.");
+            alert.showAndWait();}
+
 
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Main.neoDbObject.readSkills();
-        skillsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        skillsView.setItems(marshal(Main.skillsList));
-        Main.neoDbObject.returnCategories();
-        categorysView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        categorysView.setItems(Main.skillCategorys);
+        try {
+            Main.neoDbObject.readSkills();
+            skillsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            skillsView.setItems(marshal(Main.skillsList));
+            Main.neoDbObject.returnCategories();
+            categorysView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            categorysView.setItems(Main.skillCategorys);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public ObservableList<String> marshal(ObservableList<Skill> input){
@@ -91,5 +112,6 @@ public class JobCreationController implements Initializable {
         }
         return output;
     }
+
 
 }

@@ -13,6 +13,10 @@ public class Job {
     private String companyname;
     private String name;
 
+    public Job() {
+
+    }
+
     public String getJobid() {
         return jobid;
     }

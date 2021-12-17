@@ -1,7 +1,7 @@
 package com.demo.resy;
 
 public class User {
-
+    //TODO: User anpassen. Mehr Angaben, auch bei der Registration.
     private String username;
     private String email;
     private String password;

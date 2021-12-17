@@ -1,6 +1,5 @@
 package com.demo.resy;
 
-//TODO: Nächste Ebene, mehrere Kategorien. Machbar?
 
 public class Skill {
     private String skillname;
