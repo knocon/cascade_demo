@@ -2,27 +2,49 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="587.0" prefWidth="948.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.demo.resy.JobCreationController">
+<AnchorPane prefHeight="419.0" prefWidth="948.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.demo.resy.JobCreationController">
    <children>
-      <TextField fx:id="jobname" layoutX="20.0" layoutY="28.0" promptText="Jobname" />
-      <TextField fx:id="duration" layoutX="20.0" layoutY="61.0" promptText="Beschäftigungsdauer" />
-      <TextArea fx:id="description" layoutX="20.0" layoutY="96.0" prefHeight="99.0" prefWidth="298.0" promptText="Job-Beschreibung" />
-      <TextField fx:id="companyname" layoutX="341.0" layoutY="28.0" promptText="Unternehmen Name" />
-      <TextField fx:id="name" layoutX="341.0" layoutY="61.0" promptText="Name" />
-      <TextField fx:id="vorname" layoutX="341.0" layoutY="96.0" promptText="Vorname" />
-      <TextField fx:id="email" layoutX="341.0" layoutY="132.0" promptText="E-Mail" />
-      <TextField fx:id="telnr" layoutX="341.0" layoutY="169.0" promptText="Telefonnummer" />
-      <TextField fx:id="streetnr" layoutX="341.0" layoutY="205.0" promptText="Straße, Hausnummer" />
-      <TextField fx:id="plzort" layoutX="341.0" layoutY="243.0" promptText="PLZ, Ort" />
-      <ListView fx:id="skillsView" layoutX="20.0" layoutY="207.0" prefHeight="239.0" prefWidth="132.0" />
-      <ListView fx:id="categorysView" layoutX="186.0" layoutY="207.0" prefHeight="239.0" prefWidth="132.0" />
-      <Button fx:id="create" layoutX="350.0" layoutY="327.0" mnemonicParsing="false" onMouseClicked="#createOffer" prefHeight="55.0" prefWidth="132.0" text="Erstellen" />
-      <Label layoutX="20.0" layoutY="11.0" text="Informationen zum Job-Angebot" />
-      <Label layoutX="341.0" layoutY="11.0" text="Informationen zum Job-Anbieter" />
+      <TextField fx:id="jobtitle" layoutX="20.0" layoutY="76.0" promptText="jobtitle" text="Mechanical Engineer - Canada BKh" />
+      <TextField fx:id="location" layoutX="20.0" layoutY="171.0" promptText="location" text="China" />
+      <TextField fx:id="company" layoutX="20.0" layoutY="124.0" promptText="company" text="SP Staffing Services Private Limited" />
+      <TextField fx:id="experience" layoutX="21.0" layoutY="218.0" promptText="experience" text="4-9 Years" />
+      <TextField fx:id="salary" layoutX="20.0" layoutY="268.0" promptText="salary" text="450000-650000" />
+      <TextArea fx:id="description" layoutX="178.0" layoutY="72.0" prefHeight="289.0" prefWidth="754.0" promptText="Job-Beschreibung" text="Warm Greetings...&#10;We have an opportunity for Bachelor of Engineering Location:- China&#10;Experience :-6-15yrs&#10;Industry:- Automation Industry&#10;Location:- China&#10;Education:- B.E/ B.tech&#10;Description of Role:-&#10;1. Mechanical Engineer&#10;2. Electrical Engineer&#10;3. Product Engineer&#10;4. Injection molding Operator&#10;5. Customer service Engineer&#10;6. Stamping Die Assembly&#10;7. Electrical Switchgear Assemblies&#10;8. Pining&#10;Interested candidates please update your resume everwinhr100@ gmail.com, If you have any queries please contact : 8939853067 contact person : Rajesh" />
+      <Button fx:id="create" defaultButton="true" layoutX="20.0" layoutY="306.0" mnemonicParsing="false" onMouseClicked="#createOffer" prefHeight="55.0" prefWidth="149.0" text="Erstellen" />
+      <Label layoutX="21.0" layoutY="61.0" text="Jobtitle">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="21.0" layoutY="106.0" text="Company">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="21.0" layoutY="154.0" text="Location">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="21.0" layoutY="202.0" text="Experience">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="20.0" layoutY="250.0" text="Salary">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="397.0" layoutY="19.0" text="Job creation Form">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

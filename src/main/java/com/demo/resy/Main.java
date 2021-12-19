@@ -20,7 +20,7 @@ public class Main extends Application {
     public static String db_user = "neo4j";
     public static String db_pw = "TwrZkJZ7UXqLmRYsytRGU0iJEVGo6o9OGhDqLPiiHOU";
     public static neoDB neoDbObject = new neoDB(db_uri, db_user, db_pw, Config.defaultConfig());
-    public static User activeUser = new User("", "", "");
+    public static User activeUser = new User();
     public static ObservableList<Skill> skillsList = FXCollections.observableArrayList();
     public static ObservableList<Skill> userSkillsList = FXCollections.observableArrayList();
     public static ObservableList<Job> jobList = FXCollections.observableArrayList();
@@ -52,8 +52,6 @@ public class Main extends Application {
 
 
     public static void main(String[] args) throws SQLException {
-        Database cascade_db = new Database("jdbc:mysql://localhost:3306/cascade_db?", "root", "");
-
         String uri = "neo4j+s://94c89272.databases.neo4j.io";
         String user = "neo4j";
         String password = "TwrZkJZ7UXqLmRYsytRGU0iJEVGo6o9OGhDqLPiiHOU";

@@ -26,25 +26,25 @@ public class JobController implements Initializable {
     private Button addButton;
 
     @FXML
-    private TableColumn<Job,String> category_column;
+    private TableColumn<Job,String> jobtitle;
 
     @FXML
-    private TableColumn<Job,String> company_column;
+    private TableColumn<Job,String> company;
 
     @FXML
     private Button delButton;
 
     @FXML
-    private TableColumn<Job,String> description_column;
+    private TableColumn<Job,String> location;
 
     @FXML
-    private TableColumn<Job,String> duration_column;
+    private TableColumn<Job,String> experience;
 
     @FXML
     private Button editButton;
 
     @FXML
-    private TableColumn<Job,String> email_column;
+    private TableColumn<Job,String> salary;
 
     @FXML
     private TextField filter;
@@ -53,28 +53,12 @@ public class JobController implements Initializable {
     private TableColumn<Job,String> jobid_column;
 
     @FXML
-    private TableColumn<Job,String> jobname_column;
+    private TableColumn<Job,String> jobdescription;
 
     @FXML
     private TableView<Job> jobs_table;
 
-    @FXML
-    private TableColumn<Job,String> nachname_column;
 
-    @FXML
-    private TableColumn<Job,String> plzort_column;
-
-    @FXML
-    private TableColumn<Job,String> skillset_column;
-
-    @FXML
-    private TableColumn<Job,String> street_column;
-
-    @FXML
-    private TableColumn<Job,String> telnr_column;
-
-    @FXML
-    private TableColumn<Job,String> vorname_column;
 
     @FXML
     private Button refresh;
@@ -112,7 +96,7 @@ public class JobController implements Initializable {
             alert.setHeaderText("Important information!");
             alert.setContentText("Joboffer deleted.");
             alert.showAndWait();
-            refresh();
+            refresh(event);
         }catch(NullPointerException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Information!");
@@ -134,20 +118,14 @@ public class JobController implements Initializable {
 
         neoDbObject.readJobs();
         jobid_column.setCellValueFactory(new PropertyValueFactory<Job, String>("jobid"));
-        jobname_column.setCellValueFactory(new PropertyValueFactory<Job, String>("jobname"));
-        description_column.setCellValueFactory(new PropertyValueFactory<Job, String>("jobdescription"));
-        duration_column.setCellValueFactory(new PropertyValueFactory<Job, String>("durationOfactivity"));
-        street_column.setCellValueFactory(new PropertyValueFactory<Job, String>("strnr"));
-        plzort_column.setCellValueFactory(new PropertyValueFactory<Job, String>("plzort"));
-        telnr_column.setCellValueFactory(new PropertyValueFactory<Job, String>("telnr"));
-        nachname_column.setCellValueFactory(new PropertyValueFactory<Job, String>("name"));
-        vorname_column.setCellValueFactory(new PropertyValueFactory<Job, String>("vorname"));
-        company_column.setCellValueFactory(new PropertyValueFactory<Job, String>("companyname"));
-        skillset_column.setCellValueFactory(new PropertyValueFactory<Job, String>("jobskills"));
-        category_column.setCellValueFactory(new PropertyValueFactory<Job, String>("categorys"));
-        email_column.setCellValueFactory(new PropertyValueFactory<Job, String>("email"));
+        jobtitle.setCellValueFactory(new PropertyValueFactory<Job, String>("jobtitle"));
+        company.setCellValueFactory(new PropertyValueFactory<Job, String>("company"));
+        this.location.setCellValueFactory(new PropertyValueFactory<Job, String>("location"));
+        experience.setCellValueFactory(new PropertyValueFactory<Job, String>("experience"));
+        jobdescription.setCellValueFactory(new PropertyValueFactory<Job, String>("jobdescription"));
+        salary.setCellValueFactory(new PropertyValueFactory<Job, String>("salary"));
         jobs_table.getItems().setAll(jobList);
-
+        jobs_table.setFixedCellSize(25);
         FilteredList<Job> filteredData = new FilteredList<>(jobList, p -> true);
         filter.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(job -> {
@@ -159,7 +137,7 @@ public class JobController implements Initializable {
 
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (job.getJobname().toLowerCase().contains(lowerCaseFilter)) {
+                if (job.getJobtitle().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 } else if (job.getJobdescription().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
@@ -175,28 +153,18 @@ public class JobController implements Initializable {
 
 
     }
-    //TODO: Filter
-    public void refresh(){
+    @FXML
+    void refresh(MouseEvent event){
         neoDbObject.readJobs();
         jobid_column.setCellValueFactory(new PropertyValueFactory<Job, String>("jobid"));
-        jobname_column.setCellValueFactory(new PropertyValueFactory<Job, String>("jobname"));
-        description_column.setCellValueFactory(new PropertyValueFactory<Job, String>("jobdescription"));
-        duration_column.setCellValueFactory(new PropertyValueFactory<Job, String>("durationOfactivity"));
-        street_column.setCellValueFactory(new PropertyValueFactory<Job, String>("strnr"));
-        plzort_column.setCellValueFactory(new PropertyValueFactory<Job, String>("plzort"));
-        telnr_column.setCellValueFactory(new PropertyValueFactory<Job, String>("telnr"));
-        nachname_column.setCellValueFactory(new PropertyValueFactory<Job, String>("name"));
-        vorname_column.setCellValueFactory(new PropertyValueFactory<Job, String>("vorname"));
-        company_column.setCellValueFactory(new PropertyValueFactory<Job, String>("companyname"));
-        skillset_column.setCellValueFactory(new PropertyValueFactory<Job, String>("jobskills"));
-        category_column.setCellValueFactory(new PropertyValueFactory<Job, String>("categorys"));
-        email_column.setCellValueFactory(new PropertyValueFactory<Job, String>("email"));
-        jobs_table.getItems().setAll(jobList);
+        jobtitle.setCellValueFactory(new PropertyValueFactory<Job, String>("jobtitle"));
+        company.setCellValueFactory(new PropertyValueFactory<Job, String>("company"));
+        this.location.setCellValueFactory(new PropertyValueFactory<Job, String>("location"));
+        experience.setCellValueFactory(new PropertyValueFactory<Job, String>("experience"));
+        jobdescription.setCellValueFactory(new PropertyValueFactory<Job, String>("jobdescription"));
+        salary.setCellValueFactory(new PropertyValueFactory<Job, String>("salary"));
+        jobs_table.setItems(jobList);
 
     }
 
-    @FXML
-    void refresh(MouseEvent event) {
-        refresh();
-    }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -8,27 +9,69 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.demo.resy.RegisterController">
+<AnchorPane prefHeight="586.0" prefWidth="889.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.demo.resy.RegisterController">
    <children>
-      <Button fx:id="register_button" layoutX="213.0" layoutY="273.0" mnemonicParsing="false" onMouseClicked="#register_User" prefHeight="35.0" prefWidth="175.0" style="-fx-background-color: #004e9b;" text="Registrieren" textFill="WHITE" />
-      <TextField fx:id="email" layoutX="213.0" layoutY="149.0" prefHeight="35.0" prefWidth="175.0" promptText="max.mustermann@cascade.de" />
-      <PasswordField fx:id="password" layoutX="213.0" layoutY="217.0" prefHeight="35.0" prefWidth="175.0" />
-      <Label layoutX="213.0" layoutY="132.0" text="E-Mail">
+      <TextField fx:id="username" layoutX="273.0" layoutY="149.0" prefHeight="35.0" prefWidth="175.0" promptText="Enter your username" AnchorPane.leftAnchor="273.0" AnchorPane.rightAnchor="441.0" />
+      <TextField fx:id="email" layoutX="273.0" layoutY="186.0" prefHeight="35.0" prefWidth="175.0" promptText="Enter your email address" />
+      <PasswordField fx:id="password" layoutX="273.0" layoutY="223.0" prefHeight="35.0" prefWidth="175.0" promptText="Choose a password" />
+      <PasswordField fx:id="password2" layoutX="273.0" layoutY="260.0" prefHeight="35.0" prefWidth="175.0" promptText="Re-enter password" />
+      <TextField fx:id="firstname" layoutX="273.0" layoutY="330.0" prefHeight="35.0" prefWidth="175.0" promptText="Enter your first name" />
+      <TextField fx:id="lastname" layoutX="273.0" layoutY="367.0" prefHeight="35.0" prefWidth="175.0" promptText="Enter your last name" />
+      <ChoiceBox fx:id="gender" layoutX="273.0" layoutY="404.0" prefHeight="34.0" prefWidth="175.0" />
+      <TextField fx:id="country" layoutX="474.0" layoutY="149.0" prefHeight="35.0" prefWidth="175.0" promptText="Enter your country" />
+      <TextField fx:id="town" layoutX="474.0" layoutY="186.0" prefHeight="35.0" prefWidth="175.0" promptText="Enter your town" />
+      <TextField fx:id="postcode" layoutX="474.0" layoutY="223.0" prefHeight="35.0" prefWidth="175.0" promptText="Enter your post code" />
+      <Button fx:id="register_button" layoutX="472.0" layoutY="382.0" mnemonicParsing="false" onMouseClicked="#register_User" prefHeight="55.0" prefWidth="175.0" style="-fx-background-color: #004e9b;" text="Registrieren" textFill="WHITE" />
+      <Label layoutX="210.0" layoutY="339.0" text="First name">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label layoutX="213.0" layoutY="200.0" text="Passwort">
+      <Label layoutX="211.0" layoutY="376.0" text="Last name">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <TextField fx:id="username" layoutX="213.0" layoutY="82.0" prefHeight="35.0" prefWidth="175.0" promptText="maxMu" AnchorPane.leftAnchor="213.0" AnchorPane.rightAnchor="212.0" />
-      <Label layoutX="213.0" layoutY="65.0" text="Benutzername">
+      <Label layoutX="347.0" layoutY="35.0" text="User Registration Form">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Text layoutX="260.0" layoutY="527.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Indem Sie auf „Registrieren“ klicken, stimmen Sie unseren Nutzungsbedingungen, Datenschutzrichtlinien und Cookie-Richtlinien zu" textAlignment="CENTER" wrappingWidth="369.0" />
+      <Label layoutX="231.0" layoutY="195.0" text="E-Mail">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Text layoutX="82.0" layoutY="365.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Indem Sie auf „Registrieren“ klicken, stimmen Sie unseren Nutzungsbedingungen, Datenschutzrichtlinien und Cookie-Richtlinien zu" textAlignment="CENTER" wrappingWidth="437.0" />
+      <Label layoutX="227.0" layoutY="413.0" text="Gender">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="215.0" layoutY="232.0" text="Password">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="214.0" layoutY="158.0" text="Username">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="658.0" layoutY="158.0" text="Country">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="658.0" layoutY="195.0" text="Town">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="658.0" layoutY="232.0" text="Post Code">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

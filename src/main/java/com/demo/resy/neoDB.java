@@ -84,7 +84,7 @@ public class neoDB implements AutoCloseable {
 
     private static List<Record> hilfsMethodeJobs(Transaction tx) {
         return tx.run("MATCH(j:Job)\n" +
-                "RETURN id(j), j.jobname, j.durationOfactivity, j.jobdescription, j.companyname, j.name, j.vorname, j.email, j.telnr, j.strnr, j.plzort").list();
+                "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary").list();
     }
 
     private static List<Record> hilfsMethodeUnwind(Transaction tx, Record rec) {
@@ -138,25 +138,12 @@ public class neoDB implements AutoCloseable {
             });
         }
     }
-    //TODO: Skillset und category set auslesen und in datentabelle printen.
     public void createOffer(final Job input) {
         try (Session session = driver.session()) {
-            final String jn = input.getJobname();
-            final String dur = input.getDurationOfactivity();
-            final String area = input.getJobdescription();
-            final ObservableList<String> skills_selected = input.getJobskills();
-            final ObservableList<String> categorys_selected = input.getCategorys();
-            final String un = input.getCompanyname();
-            final String na = input.getName();
-            final String vn = input.getVorname();
-            final String em = input.getEmail();
-            final String tel = input.getTelnr();
-            final String str = input.getStrnr();
-            final String plz = input.getPlzort();
             String registerUser = session.writeTransaction(new TransactionWork<String>() {
                 @Override
                 public String execute(Transaction transaction){
-                    Result result = transaction.run("CREATE (j:Job {jobname: '"+input.getJobname()+"', durationOfactivity: '"+input.getDurationOfactivity()+"', jobdescription: '"+input.getJobdescription()+"', jobskills:["+returnList(input.getJobskills())+"], categories:["+returnList(input.getCategorys())+"], companyname:'"+input.getCompanyname()+"', name:'"+input.getName()+"', vorname:'"+input.getVorname()+"', email:'"+input.getEmail()+"', telnr:'"+input.getTelnr()+"', strnr:'"+input.getStrnr()+"', plzort:'"+input.getPlzort()+"'})");
+                    Result result = transaction.run("CREATE (j:Job{jobtitle:'"+input.getJobtitle()+"',company:'"+input.getCompany()+"',location:'"+input.getLocation()+"',experience:'"+input.getExperience()+"',salary:'"+input.getSalary()+"', jobdescription:'"+input.getJobdescription()+"'})");
                     System.out.println("Job Created");
                     return null;
 
@@ -178,8 +165,12 @@ public class neoDB implements AutoCloseable {
         }
     }
 
+    /**
+     * DEAD FUNCTION
+     * @param input
+     */
     public void createOfferRelationship(final Job input) {
-        try (Session session = driver.session()) {
+        /*try (Session session = driver.session()) {
             final String jn = input.getJobname();
             final ObservableList<String> skills_selected = input.getJobskills();
             int size = skills_selected.size();
@@ -200,9 +191,12 @@ public class neoDB implements AutoCloseable {
 
                 }
             });
-        }
+        }*/
     }
-
+    /**
+     * DEAD FUNCTION
+     * @param input
+     */
     public String returnList(ObservableList<String> input){
         String outputstring = "";
         int size = input.size();
@@ -334,7 +328,7 @@ public class neoDB implements AutoCloseable {
                 @Override
                 public List<Record> execute(Transaction transaction) {
                     Result job = transaction.run("MATCH(j:Job)\n" +
-                            "RETURN id(j), j.jobname, j.durationOfactivity, j.jobdescription, j.companyname, j.name, j.vorname, j.email, j.telnr, j.strnr, j.plzort");
+                            "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary");
                     return hilfsMethodeJobs(transaction);
                 }
             });
@@ -342,47 +336,14 @@ public class neoDB implements AutoCloseable {
             try {
                 for (Record item : puffer) {
                     Map<String, Object> map = item.asMap();
-                    final String jid = map.get("id(j)").toString();
-                    final String jn = map.get("j.jobname").toString();
-                    final String dur = map.get("j.durationOfactivity").toString();
-                    final String area = map.get("j.jobdescription").toString();
-                    final String un = map.get("j.companyname").toString();
-                    final String na = map.get("j.name").toString();
-                    final String vn = map.get("j.vorname").toString();
-                    final String em = map.get("j.email").toString();
-                    final String tel = map.get("j.telnr").toString();
-                    final String str = map.get("j.strnr").toString();
-                    final String plz = map.get("j.plzort").toString();
-                    /*Hoher Performance-Fresser. AlternativLösung dringend nötig.*/
-                    //Job j = new Job(jn, dur, area, unwind(item), unwind(item), un, na, vn, em , tel, str, plz);
-                    Job j = new Job(jn, dur, area, null, null, un, na, vn, em, tel, str, plz);
-                    j.setJobid(jid);
+                    Job j = new Job(map.get("j.jobtitle").toString(), map.get("j.company").toString(), map.get("j.location").toString(), map.get("j.experience").toString(), map.get("j.salary").toString(), map.get("j.jobdescription").toString());
+                    j.setJobid(map.get("id(j)").toString());
                     Main.jobList.add(j);
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 System.out.println("Error in loading data.");
             }
-
-
-        }
-    }
-    public ObservableList<String> unwind(Record rec) {
-        ObservableList<String> output = FXCollections.observableArrayList();
-        try (Session session = driver.session()) {
-            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
-                @Override
-                public List<Record> execute(Transaction transaction) {
-                    Result job = transaction.run("MATCH(j:Job{jobname:"+rec.get("j.jobname")+"})\n" +
-                            "UNWIND j.jobskills AS js\n" +
-                            "RETURN DISTINCT js");
-                    return hilfsMethodeUnwind(transaction, rec);
-                }
-            });
-            for(Record item : puffer){
-                output.add(item.get("js").toString());
-            }
-            return output;
 
 
         }
@@ -410,43 +371,7 @@ public class neoDB implements AutoCloseable {
 
         }
     }
-    //TODO: Mit fehlerhaften Daten umgehen können.
-    public void returnCategories(){
-        Main.skillCategorys.removeAll(Main.skillCategorys);
-        try(Session session = driver.session()){
-            List<Record> results = session.readTransaction(new TransactionWork<List<Record>>() {
-                @Override
-                public List<Record> execute(Transaction transaction) {
-                    Result result = transaction.run("MATCH(s:Skill) RETURN DISTINCT s.category");
-                    return hilfsMethodeSkillCategorys(transaction);
-                }
-            });
 
-            try {
-                for(Record item : results){
-                    Map<String, Object> map = item.asMap();
-                    Main.skillCategorys.add(map.get("s.category").toString());
-                    System.out.println(map.get("s.category").toString());
-                }
-            } catch (NullPointerException e) {
-                System.out.println("Error in Skills.");
-            }
-        }
-    }
-
-
-    /**
-     * Folgender Code nur zum probieren & testen..
-     */
-
-    /**
-     *
-     */
-    public void addPerson(String name) {
-        try (Session session = driver.session()) {
-            session.run("CREATE (a:Person {name: $name})", parameters("name", name));
-        }
-    }
 
 
 }
