@@ -58,6 +58,9 @@ public class JobController implements Initializable {
     @FXML
     private TableView<Job> jobs_table;
 
+    @FXML
+    private TableColumn<Job, Integer> rating;
+
 
 
     @FXML
@@ -124,6 +127,7 @@ public class JobController implements Initializable {
         experience.setCellValueFactory(new PropertyValueFactory<Job, String>("experience"));
         jobdescription.setCellValueFactory(new PropertyValueFactory<Job, String>("jobdescription"));
         salary.setCellValueFactory(new PropertyValueFactory<Job, String>("salary"));
+        rating.setCellValueFactory(new PropertyValueFactory<Job, Integer>("rating"));
         jobs_table.getItems().setAll(jobList);
         jobs_table.setFixedCellSize(25);
         FilteredList<Job> filteredData = new FilteredList<>(jobList, p -> true);

@@ -7,9 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
-import java.lang.reflect.Array;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class JobCreationController implements Initializable {
@@ -53,13 +51,14 @@ public class JobCreationController implements Initializable {
         //TODO: REGEX BEI EXPERIENCE&SALARY
 
         if(jobtitle.getText()!="" && company.getText()!="" && location.getText()!="" && experience.getText()!="" && salary.getText()!="" && description.getText()!=""){
-            Job newJob = new Job(jobtitle.getText(), company.getText(), location.getText(), experience.getText(), salary.getText(), description.getText());
+            Job newJob = new Job(jobtitle.getText(), company.getText(), location.getText(), experience.getText(), salary.getText(), description.getText(), 0);
             Main.neoDbObject.createOffer(newJob);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation!");
             alert.setHeaderText("Important information!");
             alert.setContentText("Done.");
             alert.showAndWait();
+            System.out.println(newJob.getRating());
         }
         else{Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Information!");

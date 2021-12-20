@@ -1,23 +1,36 @@
 package com.demo.resy;
 
-import javafx.collections.ObservableList;
+import java.util.Comparator;
 
-import java.util.ArrayList;
-
-public class Job {
+public class Job implements Comparator<Job> {
     private String jobtitle;
+
+    private int rating;
 
     public String getJobtitle() {
         return jobtitle;
     }
 
-    public Job(String jobtitel, String company, String location, String experience, String salary, String jobdescription) {
+    public Job() {
+
+    }
+
+    public Job(String jobtitel, String company, String location, String experience, String salary, String jobdescription, int rating) {
         this.jobtitle = jobtitel;
         this.company = company;
         this.location = location;
         this.experience = experience;
         this.salary = salary;
         this.jobdescription = jobdescription;
+        this.rating = rating;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public void setJobtitle(String jobtitle) {
@@ -78,4 +91,9 @@ public class Job {
     private String experience;
     private String salary;
     private String jobdescription;
+
+    @Override
+    public int compare(Job o1, Job o2) {
+        return Integer.compare(o1.getRating(), o2.getRating());
+    }
 }

@@ -1,6 +1,5 @@
 package com.demo.resy;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.neo4j.driver.*;
 import org.neo4j.driver.Record;
@@ -8,8 +7,6 @@ import org.neo4j.driver.Record;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
-import static org.neo4j.driver.Values.parameters;
 
 //CYPHER
 
@@ -84,7 +81,7 @@ public class neoDB implements AutoCloseable {
 
     private static List<Record> hilfsMethodeJobs(Transaction tx) {
         return tx.run("MATCH(j:Job)\n" +
-                "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary").list();
+                "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary, j.rating").list();
     }
 
     private static List<Record> hilfsMethodeUnwind(Transaction tx, Record rec) {
@@ -143,7 +140,7 @@ public class neoDB implements AutoCloseable {
             String registerUser = session.writeTransaction(new TransactionWork<String>() {
                 @Override
                 public String execute(Transaction transaction){
-                    Result result = transaction.run("CREATE (j:Job{jobtitle:'"+input.getJobtitle()+"',company:'"+input.getCompany()+"',location:'"+input.getLocation()+"',experience:'"+input.getExperience()+"',salary:'"+input.getSalary()+"', jobdescription:'"+input.getJobdescription()+"'})");
+                    Result result = transaction.run("CREATE (j:Job{jobtitle:'"+input.getJobtitle()+"',company:'"+input.getCompany()+"',location:'"+input.getLocation()+"',experience:'"+input.getExperience()+"',salary:'"+input.getSalary()+"', jobdescription:'"+input.getJobdescription()+"', rating:'0'})");
                     System.out.println("Job Created");
                     return null;
 
@@ -328,7 +325,7 @@ public class neoDB implements AutoCloseable {
                 @Override
                 public List<Record> execute(Transaction transaction) {
                     Result job = transaction.run("MATCH(j:Job)\n" +
-                            "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary");
+                            "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary, j.rating");
                     return hilfsMethodeJobs(transaction);
                 }
             });
@@ -336,7 +333,9 @@ public class neoDB implements AutoCloseable {
             try {
                 for (Record item : puffer) {
                     Map<String, Object> map = item.asMap();
-                    Job j = new Job(map.get("j.jobtitle").toString(), map.get("j.company").toString(), map.get("j.location").toString(), map.get("j.experience").toString(), map.get("j.salary").toString(), map.get("j.jobdescription").toString());
+                    String ratingS = map.get("j.rating").toString();
+                    int rating = Integer.parseInt(ratingS);
+                    Job j = new Job(map.get("j.jobtitle").toString(), map.get("j.company").toString(), map.get("j.location").toString(), map.get("j.experience").toString(), map.get("j.salary").toString(), map.get("j.jobdescription").toString(), rating);
                     j.setJobid(map.get("id(j)").toString());
                     Main.jobList.add(j);
                 }
