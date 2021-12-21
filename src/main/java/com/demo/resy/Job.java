@@ -92,6 +92,17 @@ public class Job implements Comparator<Job> {
     private String salary;
     private String jobdescription;
 
+
+    private String[] keywords;
+
+    public String[] getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String[] keywords) {
+        this.keywords = keywords;
+    }
+
     @Override
     public int compare(Job o1, Job o2) {
         return Integer.compare(o1.getRating(), o2.getRating());

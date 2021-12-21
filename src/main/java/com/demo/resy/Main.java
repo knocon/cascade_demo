@@ -8,11 +8,17 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.neo4j.driver.Config;
-
+import io.github.crew102.rapidrake.RakeAlgorithm;
+import io.github.crew102.rapidrake.data.SmartWords;
+import io.github.crew102.rapidrake.model.RakeParams;
+import io.github.crew102.rapidrake.model.Result;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.BreakIterator;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Main extends Application {
@@ -21,10 +27,12 @@ public class Main extends Application {
     public static String db_pw = "TwrZkJZ7UXqLmRYsytRGU0iJEVGo6o9OGhDqLPiiHOU";
     public static neoDB neoDbObject = new neoDB(db_uri, db_user, db_pw, Config.defaultConfig());
     public static User activeUser = new User();
+    public static KeywordGen keywordGen = new KeywordGen();
     public static ObservableList<Skill> skillsList = FXCollections.observableArrayList();
     public static ObservableList<Skill> userSkillsList = FXCollections.observableArrayList();
     public static ObservableList<Job> jobList = FXCollections.observableArrayList();
     public static ObservableList<String> skillCategorys = FXCollections.observableArrayList();
+    public static ArrayList<String> keywords = new ArrayList<>();
 
 
     public static boolean isLogStatus() {
@@ -51,21 +59,10 @@ public class Main extends Application {
     }
 
 
-    public static void main(String[] args) throws SQLException {
-        String uri = "neo4j+s://94c89272.databases.neo4j.io";
-        String user = "neo4j";
-        String password = "TwrZkJZ7UXqLmRYsytRGU0iJEVGo6o9OGhDqLPiiHOU";
-
-        try (neoDB cc_db = new neoDB(uri, user, password, Config.defaultConfig())) {
-            System.out.print("Connection neo4j");
-            //cc_db.printGreeting("Person");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
+    public static void main(String[] args) throws SQLException, IOException {
         System.out.println("Java-FX Launch pending...");
         launch();
-        System.out.println("Java-FX Launch successful!");
+        System.out.println("Java-FX exit.");
     }
+
 }

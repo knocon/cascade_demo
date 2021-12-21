@@ -4,6 +4,7 @@ package com.demo.resy;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,13 +15,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
+import java.net.URL;
+import java.security.Key;
+import java.util.List;
+import java.util.ResourceBundle;
 
 import static com.demo.resy.Main.*;
 
 
-public class MainController {
+public class MainController implements Initializable {
 
     private Stage stage;
     private Scene scene;
@@ -145,16 +151,12 @@ public class MainController {
     }
 
     @FXML
-    void generateRecs(MouseEvent event) {
+    void generateRecs(MouseEvent event) throws IOException {
 
-    }
-
-    @FXML
-    void generateTops(MouseEvent event) throws IOException {
         /**
          * Opens a new Scene.
          */
-        Parent root = FXMLLoader.load(getClass().getResource("recommendations.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("search.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -162,4 +164,28 @@ public class MainController {
     }
 
 
+
+    @FXML
+    void generateTops(MouseEvent event) throws IOException {
+        /**
+         * Opens a new Scene.
+         */
+        Parent root = FXMLLoader.load(getClass().getResource("anything.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        neoDbObject.readJobs();
+        try {
+            TextFields.bindAutoCompletion(eingabefeld, keywordGen.generateKeywordsForSearch(jobList));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

@@ -1,9 +1,14 @@
 package com.demo.resy;
 
+import io.github.crew102.rapidrake.RakeAlgorithm;
+import io.github.crew102.rapidrake.data.SmartWords;
+import io.github.crew102.rapidrake.model.RakeParams;
 import javafx.collections.ObservableList;
 import org.neo4j.driver.*;
 import org.neo4j.driver.Record;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -81,7 +86,7 @@ public class neoDB implements AutoCloseable {
 
     private static List<Record> hilfsMethodeJobs(Transaction tx) {
         return tx.run("MATCH(j:Job)\n" +
-                "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary, j.rating").list();
+                "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary, j.rating, j.keywords").list();
     }
 
     private static List<Record> hilfsMethodeUnwind(Transaction tx, Record rec) {
@@ -140,12 +145,38 @@ public class neoDB implements AutoCloseable {
             String registerUser = session.writeTransaction(new TransactionWork<String>() {
                 @Override
                 public String execute(Transaction transaction){
-                    Result result = transaction.run("CREATE (j:Job{jobtitle:'"+input.getJobtitle()+"',company:'"+input.getCompany()+"',location:'"+input.getLocation()+"',experience:'"+input.getExperience()+"',salary:'"+input.getSalary()+"', jobdescription:'"+input.getJobdescription()+"', rating:'0'})");
+                    try {
+                        Result result = transaction.run("CREATE (j:Job{jobtitle:'"+input.getJobtitle()+"',company:'"+input.getCompany()+"',location:'"+input.getLocation()+"',experience:'"+input.getExperience()+"',salary:'"+input.getSalary()+"', jobdescription:'"+input.getJobdescription()+"', rating:'0', keywords:'"+Main.keywordGen.generateKeywordsJob(input)+"'})");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     System.out.println("Job Created");
                     return null;
 
                 }
             });
+        }
+    }
+
+    public void updateAllOffers(ObservableList<Job> input) {
+        try (Session session = driver.session()) {
+            for (Job j : input) {
+                String jid = j.getJobid();
+                String registerUser = session.writeTransaction(new TransactionWork<String>() {
+                    @Override
+                    public String execute(Transaction transaction){
+                        try {
+                            Result result = transaction.run("MATCH(j:Job) WHERE id(j)="+jid+" SET j.keywords ='"+Main.keywordGen.generateKeywordsJob(j)+"'");
+                            System.out.println("Job:"+jid+" updated.");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        return null;
+
+                    }
+                });
+            }
         }
     }
 
@@ -325,7 +356,7 @@ public class neoDB implements AutoCloseable {
                 @Override
                 public List<Record> execute(Transaction transaction) {
                     Result job = transaction.run("MATCH(j:Job)\n" +
-                            "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary, j.rating");
+                            "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary, j.rating, j.keywords");
                     return hilfsMethodeJobs(transaction);
                 }
             });
@@ -337,6 +368,7 @@ public class neoDB implements AutoCloseable {
                     int rating = Integer.parseInt(ratingS);
                     Job j = new Job(map.get("j.jobtitle").toString(), map.get("j.company").toString(), map.get("j.location").toString(), map.get("j.experience").toString(), map.get("j.salary").toString(), map.get("j.jobdescription").toString(), rating);
                     j.setJobid(map.get("id(j)").toString());
+                    j.setKeywords(map.get("j.keywords").toString().split(", "));
                     Main.jobList.add(j);
                 }
             } catch (NullPointerException e) {
@@ -347,6 +379,8 @@ public class neoDB implements AutoCloseable {
 
         }
     }
+
+
 
     public void readUserSkills() {
         Main.userSkillsList.removeAll(Main.userSkillsList);

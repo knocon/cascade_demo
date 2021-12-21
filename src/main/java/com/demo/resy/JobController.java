@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -108,6 +109,15 @@ public class JobController implements Initializable {
             alert.showAndWait();
         }
 
+    }
+
+    @FXML
+    private Button generate;
+
+    @FXML
+    void genKey(MouseEvent event) throws IOException {
+        neoDbObject.readJobs();
+        neoDbObject.updateAllOffers(jobList);
     }
 
     @FXML
