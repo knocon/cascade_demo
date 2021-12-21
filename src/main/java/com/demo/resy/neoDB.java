@@ -7,7 +7,12 @@ import javafx.collections.ObservableList;
 import org.neo4j.driver.*;
 import org.neo4j.driver.Record;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +91,7 @@ public class neoDB implements AutoCloseable {
 
     private static List<Record> hilfsMethodeJobs(Transaction tx) {
         return tx.run("MATCH(j:Job)\n" +
-                "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary, j.rating, j.keywords").list();
+                "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary, j.likes, j.keywords").list();
     }
 
     private static List<Record> hilfsMethodeUnwind(Transaction tx, Record rec) {
@@ -102,7 +107,7 @@ public class neoDB implements AutoCloseable {
     private static List<Record> hilfsMethodeUserSkills(Transaction tx) {
         String username = Main.activeUser.getUsername();
         return tx.run("MATCH(u:User{username:'"+username+"'})-[r:has_skill]->(s:Skill)\n" +
-                "RETURN s.skillname, s.description, s.category").list();
+                "RETURN s.skillname, s.description").list();
     }
 
     private static List<Record> hilfsMethodeSkillCategorys(Transaction tx) {
@@ -146,13 +151,39 @@ public class neoDB implements AutoCloseable {
                 @Override
                 public String execute(Transaction transaction){
                     try {
-                        Result result = transaction.run("CREATE (j:Job{jobtitle:'"+input.getJobtitle()+"',company:'"+input.getCompany()+"',location:'"+input.getLocation()+"',experience:'"+input.getExperience()+"',salary:'"+input.getSalary()+"', jobdescription:'"+input.getJobdescription()+"', rating:'0', keywords:'"+Main.keywordGen.generateKeywordsJob(input)+"'})");
+                        Result result = transaction.run("CREATE (j:Job{jobtitle:'"+input.getJobtitle()+"',company:'"+input.getCompany()+"',location:'"+input.getLocation()+"',experience:'"+input.getExperience()+"',salary:'"+input.getSalary()+"', jobdescription:'"+input.getJobdescription()+"', likes:0, keywords:'"+Main.keywordGen.generateKeywordsJob(input)+"'})");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     System.out.println("Job Created");
                     return null;
 
+                }
+            });
+        }
+    }
+
+    public void likeOffer(final Job job, User active){
+        try (Session session = driver.session()) {
+            final String id = job.getJobid();
+            String delete = session.writeTransaction(new TransactionWork<String>() {
+                @Override
+                public String execute(Transaction transaction) {
+                    Result result = transaction.run("MATCH (u:User{username:'"+active.getUsername()+"'}), (j:Job) WHERE id(j)="+id+" AND NOT (u)-[:likes]->(j) CREATE (u)-[l:likes]->(j) SET j.likes = j.likes+1");
+                    return null;
+                }
+            });
+        }
+    }
+
+    public void dislikeOffer(final Job job, User active){
+        try (Session session = driver.session()) {
+            final String id = job.getJobid();
+            String delete = session.writeTransaction(new TransactionWork<String>() {
+                @Override
+                public String execute(Transaction transaction) {
+                    Result result = transaction.run("MATCH (u:User{username:'"+active.getUsername()+"'})-[l:likes]-(j:Job) WHERE id(j)="+id+" SET j.likes = j.likes-1 DELETE l");
+                    return null;
                 }
             });
         }
@@ -356,7 +387,7 @@ public class neoDB implements AutoCloseable {
                 @Override
                 public List<Record> execute(Transaction transaction) {
                     Result job = transaction.run("MATCH(j:Job)\n" +
-                            "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary, j.rating, j.keywords");
+                            "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary, j.likes, j.keywords");
                     return hilfsMethodeJobs(transaction);
                 }
             });
@@ -364,9 +395,9 @@ public class neoDB implements AutoCloseable {
             try {
                 for (Record item : puffer) {
                     Map<String, Object> map = item.asMap();
-                    String ratingS = map.get("j.rating").toString();
-                    int rating = Integer.parseInt(ratingS);
-                    Job j = new Job(map.get("j.jobtitle").toString(), map.get("j.company").toString(), map.get("j.location").toString(), map.get("j.experience").toString(), map.get("j.salary").toString(), map.get("j.jobdescription").toString(), rating);
+                    String ratingS = map.get("j.likes").toString();
+                    int likes = Integer.parseInt(ratingS);
+                    Job j = new Job(map.get("j.jobtitle").toString(), map.get("j.company").toString(), map.get("j.location").toString(), map.get("j.experience").toString(), map.get("j.salary").toString(), map.get("j.jobdescription").toString(), likes);
                     j.setJobid(map.get("id(j)").toString());
                     j.setKeywords(map.get("j.keywords").toString().split(", "));
                     Main.jobList.add(j);
@@ -390,7 +421,7 @@ public class neoDB implements AutoCloseable {
                 @Override
                 public List<Record> execute(Transaction transaction) {
                     Result result = transaction.run("MATCH(u:User{username:'"+username+"'})-[r:has_skill]->(s:Skill)\n" +
-                            "RETURN s.skillname, s.description, s.category");
+                            "RETURN s.skillname, s.description");
                     return hilfsMethodeUserSkills(transaction);
                 }
             });
@@ -403,6 +434,56 @@ public class neoDB implements AutoCloseable {
 
 
         }
+    }
+
+    /**
+     * Importiert das gestellte Datenset.
+     * Import dauert ca 7-10Minuten.
+     */
+
+
+    public void createJobsCSV(){
+        Path pathToFile = Paths.get("src/main/resources/com/demo/resy/jobdata/masterjobs.txt");
+
+        try (BufferedReader br = Files.newBufferedReader(pathToFile,
+                StandardCharsets.ISO_8859_1)) {
+            String line = br.readLine();
+            while(line!=null){
+                System.out.println(line);
+                String[] attributes = line.split(";");
+                String jobtitel = attributes[0];
+                String company = attributes[1];
+                String location = attributes[2];
+                String experience = attributes[3];
+                String salary = attributes[4];
+                String jobdescription = attributes[5];
+
+                String generateKeywords ="";
+                generateKeywords+= company+","+jobdescription+","+jobtitel+","+location;
+
+
+                try (Session session = driver.session()) {
+                    String finalGenerateKeywords = generateKeywords;
+                    String registerUser = session.writeTransaction(new TransactionWork<String>() {
+                        @Override
+                        public String execute(Transaction transaction){
+                            try {
+                                Result result = transaction.run("CREATE (j:Job{jobtitle:'"+jobtitel+"',company:'"+company+"',location:'"+location+"',experience:'"+experience+"',salary:'"+salary+"', jobdescription:'"+jobdescription+"', likes:0, keywords:'"+Main.keywordGen.generateKeywordsString(finalGenerateKeywords)+"'})");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            System.out.println("Job Created");
+                            return null;
+
+                        }
+                    });
+                }
+
+                line = br.readLine();}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

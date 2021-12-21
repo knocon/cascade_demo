@@ -64,7 +64,7 @@ public class SearchController implements Initializable {
     private TableColumn<Recommendation, String> location;
 
     @FXML
-    private TableColumn<Recommendation, Integer> rating;
+    private TableColumn<Recommendation, Integer> likes;
 
     @FXML
     private Button refresh;
@@ -110,39 +110,17 @@ public class SearchController implements Initializable {
             experience.setCellValueFactory(new PropertyValueFactory<Recommendation, String>("experience"));
             jobdescription.setCellValueFactory(new PropertyValueFactory<Recommendation, String>("jobdescription"));
             salary.setCellValueFactory(new PropertyValueFactory<Recommendation, String>("salary"));
-            rating.setCellValueFactory(new PropertyValueFactory<Recommendation, Integer>("rating"));
+            likes.setCellValueFactory(new PropertyValueFactory<Recommendation, Integer>("rating"));
             debugcode.setCellValueFactory(new PropertyValueFactory<Recommendation, String>("debugcode"));
             jobs_table.setFixedCellSize(57);
 
-            jobList.sort(Comparator.comparing(Job::getRating));
-            int bestrating = jobList.get(jobList.size()-1).getRating();
-            int secondbestrating = jobList.get(jobList.size()-2).getRating();
-            ObservableList<Recommendation> bestjobs = FXCollections.observableArrayList();
-            for(Job job: jobList){
-                /**
-                 * generate list of top rated jobs.
-                 */
-                if(job.getRating() == bestrating || job.getRating() == secondbestrating){
-                    //TODO: Duplikate entfernen.
-                    Recommendation rec = new Recommendation(job.getJobtitle(), job.getCompany(), job.getLocation(), job.getExperience(), job.getSalary(), job.getJobdescription(), "NPR", job.getRating());
-                    bestjobs.add(rec);
-                }
-            }
-            System.out.println("Results finished.");
-            jobs_table.setItems(bestjobs);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public ObservableList<String> marshal(ObservableList<Skill> input){
-        ObservableList<String> output = FXCollections.observableArrayList();
-        for(Skill item : input){
-            output.add(item.getSkillname());
-        }
-        return output;
-    }
+
 
 
 }

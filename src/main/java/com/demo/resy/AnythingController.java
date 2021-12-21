@@ -19,8 +19,7 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.ResourceBundle;
 
-import static com.demo.resy.Main.jobList;
-import static com.demo.resy.Main.neoDbObject;
+import static com.demo.resy.Main.*;
 
 public class AnythingController implements Initializable {
 
@@ -31,44 +30,44 @@ public class AnythingController implements Initializable {
     private Button addButton;
 
     @FXML
-    private TableColumn<Recommendation, String> company;
+    private TableColumn<Job, String> company;
 
     @FXML
-    private TableColumn<Recommendation, String> debugcode;
+    private TableColumn<Job, String> debugcode;
 
     @FXML
-    private Button delButton;
+    private Button dislikeButton;
 
     @FXML
-    private Button editButton;
+    private Button likeButton;
 
     @FXML
-    private TableColumn<Recommendation, String> experience;
+    private TableColumn<Job, String> experience;
 
     @FXML
     private TextField filter;
 
     @FXML
-    private TableColumn<Recommendation, String> jobdescription;
+    private TableColumn<Job, String> jobdescription;
 
 
     @FXML
-    private TableView<Recommendation> jobs_table;
+    private TableView<Job> jobs_table;
 
     @FXML
-    private TableColumn<Recommendation, String> jobtitle;
+    private TableColumn<Job, String> jobtitle;
 
     @FXML
-    private TableColumn<Recommendation, String> location;
+    private TableColumn<Job, String> location;
 
     @FXML
-    private TableColumn<Recommendation, Integer> rating;
+    private TableColumn<Job, Integer> likes;
 
     @FXML
     private Button refresh;
 
     @FXML
-    private TableColumn<Recommendation, String> salary;
+    private TableColumn<Job, String> salary;
 
     @FXML
     void addJob(MouseEvent event) {
@@ -95,40 +94,119 @@ public class AnythingController implements Initializable {
 
     @FXML
     void refresh(MouseEvent event) {
+        try {
+            bestJobs.removeAll(bestJobs);
+            neoDbObject.readJobs();
+            jobtitle.setCellValueFactory(new PropertyValueFactory<Job, String>("jobtitle"));
+            company.setCellValueFactory(new PropertyValueFactory<Job, String>("company"));
+            this.location.setCellValueFactory(new PropertyValueFactory<Job, String>("location"));
+            experience.setCellValueFactory(new PropertyValueFactory<Job, String>("experience"));
+            jobdescription.setCellValueFactory(new PropertyValueFactory<Job, String>("jobdescription"));
+            salary.setCellValueFactory(new PropertyValueFactory<Job, String>("salary"));
+            likes.setCellValueFactory(new PropertyValueFactory<Job, Integer>("likes"));
+            debugcode.setCellValueFactory(new PropertyValueFactory<Job, String>("debugcode"));
+            jobs_table.setFixedCellSize(57);
+
+            jobList.sort(Comparator.comparing(Job::getLikes));
+            int bestrating = jobList.get(jobList.size()-1).getLikes();
+            int secondbestrating = jobList.get(jobList.size()-2).getLikes();
+            for(Job job: jobList){
+                /**
+                 * generate list of top rated jobs.
+                 */
+                if(job.getLikes() == bestrating || job.getLikes() == secondbestrating){
+                    //TODO: Duplikate entfernen.
+                    job.setDebugcode("NPR");
+                    bestJobs.add(job);
+                }
+            }
+            System.out.println("Results finished.");
+            jobs_table.setItems(bestJobs);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void likeJob(MouseEvent event) {
+
+        try{
+
+            neoDbObject.likeOffer(jobs_table.getSelectionModel().getSelectedItem(), activeUser);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation!");
+            alert.setHeaderText("Important information!");
+            alert.setContentText("Joboffer deleted.");
+            alert.showAndWait();
+            refresh(event);
+        }catch(NullPointerException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Information!");
+            alert.setHeaderText("Missing information!");
+            alert.setContentText("Tupel nicht ausgewählt!");
+            alert.showAndWait();
+        }
+
+    }
+
+    @FXML
+    void dislikeJob(MouseEvent event) {
+
+        try{
+
+            neoDbObject.dislikeOffer(jobs_table.getSelectionModel().getSelectedItem(), activeUser);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation!");
+            alert.setHeaderText("Important information!");
+            alert.setContentText("Like deleted.");
+            alert.showAndWait();
+            refresh(event);
+        }catch(NullPointerException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Information!");
+            alert.setHeaderText("Missing information!");
+            alert.setContentText("Tupel nicht ausgewählt!");
+            alert.showAndWait();
+        }
 
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
+            bestJobs.removeAll(bestJobs);
             neoDbObject.readJobs();
-            jobtitle.setCellValueFactory(new PropertyValueFactory<Recommendation, String>("jobtitle"));
-            company.setCellValueFactory(new PropertyValueFactory<Recommendation, String>("company"));
-            this.location.setCellValueFactory(new PropertyValueFactory<Recommendation, String>("location"));
-            experience.setCellValueFactory(new PropertyValueFactory<Recommendation, String>("experience"));
-            jobdescription.setCellValueFactory(new PropertyValueFactory<Recommendation, String>("jobdescription"));
-            salary.setCellValueFactory(new PropertyValueFactory<Recommendation, String>("salary"));
-            rating.setCellValueFactory(new PropertyValueFactory<Recommendation, Integer>("rating"));
-            debugcode.setCellValueFactory(new PropertyValueFactory<Recommendation, String>("debugcode"));
+            jobtitle.setCellValueFactory(new PropertyValueFactory<Job, String>("jobtitle"));
+            company.setCellValueFactory(new PropertyValueFactory<Job, String>("company"));
+            this.location.setCellValueFactory(new PropertyValueFactory<Job, String>("location"));
+            experience.setCellValueFactory(new PropertyValueFactory<Job, String>("experience"));
+            jobdescription.setCellValueFactory(new PropertyValueFactory<Job, String>("jobdescription"));
+            salary.setCellValueFactory(new PropertyValueFactory<Job, String>("salary"));
+            likes.setCellValueFactory(new PropertyValueFactory<Job, Integer>("likes"));
+
+            debugcode.setCellValueFactory(new PropertyValueFactory<Job, String>("debugcode"));
             jobs_table.setFixedCellSize(57);
 
-            jobList.sort(Comparator.comparing(Job::getRating));
-            int bestrating = jobList.get(jobList.size()-1).getRating();
-            int secondbestrating = jobList.get(jobList.size()-2).getRating();
-            ObservableList<Recommendation> bestjobs = FXCollections.observableArrayList();
+            jobList.sort(Comparator.comparing(Job::getLikes));
+            int bestrating = jobList.get(jobList.size()-1).getLikes();
+            int secondbestrating = jobList.get(jobList.size()-2).getLikes();
             for(Job job: jobList){
                 /**
                  * generate list of top rated jobs.
                  */
-                if(job.getRating() == bestrating || job.getRating() == secondbestrating){
+                if(job.getLikes() == bestrating || job.getLikes() == secondbestrating){
                     //TODO: Duplikate entfernen.
-                    Recommendation rec = new Recommendation(job.getJobtitle(), job.getCompany(), job.getLocation(), job.getExperience(), job.getSalary(), job.getJobdescription(), "NPR", job.getRating());
-                    bestjobs.add(rec);
+                    job.setDebugcode("NPR");
+                    bestJobs.add(job);
                 }
             }
             System.out.println("Results finished.");
-            jobs_table.setItems(bestjobs);
 
+            jobs_table.setItems(bestJobs);
+            likes.setSortType(TableColumn.SortType.DESCENDING);
+            jobs_table.getSortOrder().add(likes);
+            likes.setSortable(true);
         } catch (Exception e) {
             e.printStackTrace();
         }

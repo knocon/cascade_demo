@@ -5,7 +5,7 @@ import java.util.Comparator;
 public class Job implements Comparator<Job> {
     private String jobtitle;
 
-    private int rating;
+    private int likes;
 
     public String getJobtitle() {
         return jobtitle;
@@ -14,23 +14,20 @@ public class Job implements Comparator<Job> {
     public Job() {
 
     }
+    private String debugcode;
 
-    public Job(String jobtitel, String company, String location, String experience, String salary, String jobdescription, int rating) {
+    public Job(String jobtitel, String company, String location, String experience, String salary, String jobdescription, int likes) {
         this.jobtitle = jobtitel;
         this.company = company;
         this.location = location;
         this.experience = experience;
         this.salary = salary;
         this.jobdescription = jobdescription;
-        this.rating = rating;
+        this.likes = likes;
     }
 
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
+    public int getLikes() {
+        return likes;
     }
 
     public void setJobtitle(String jobtitle) {
@@ -92,6 +89,18 @@ public class Job implements Comparator<Job> {
     private String salary;
     private String jobdescription;
 
+    public void setLikes(int rating) {
+        this.likes = likes;
+    }
+
+    public String getDebugcode() {
+        return debugcode;
+    }
+
+    public void setDebugcode(String debugcode) {
+        this.debugcode = debugcode;
+    }
+
 
     private String[] keywords;
 
@@ -105,6 +114,6 @@ public class Job implements Comparator<Job> {
 
     @Override
     public int compare(Job o1, Job o2) {
-        return Integer.compare(o1.getRating(), o2.getRating());
+        return Integer.compare(o1.getLikes(), o2.getLikes());
     }
 }

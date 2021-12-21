@@ -5,9 +5,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="671.0" prefWidth="1234.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.demo.resy.JobController">
@@ -21,7 +20,7 @@
             <TableColumn fx:id="experience" editable="false" minWidth="0.0" prefWidth="93.0" resizable="false" text="experience" />
             <TableColumn fx:id="salary" editable="false" prefWidth="102.0" resizable="false" text="salary" />
             <TableColumn fx:id="jobdescription" editable="false" prefWidth="250.0" resizable="false" style="-fx-cell-size: 50px;" text="job description" />
-            <TableColumn fx:id="rating" editable="false" prefWidth="52.0" resizable="false" style="-fx-cell-size: 50px;" text="rating" />
+            <TableColumn fx:id="likes" editable="false" prefWidth="52.0" resizable="false" style="-fx-cell-size: 50px;" text="likes" />
         </columns>
       </TableView>
       <TextField fx:id="filter" layoutX="14.0" layoutY="11.0" prefHeight="25.0" prefWidth="249.0" promptText="filter job results" />
@@ -44,7 +43,7 @@
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-      <Button fx:id="generate" layoutX="540.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#genKey" prefHeight="25.0" prefWidth="151.0" text="Generate Keywords" textAlignment="CENTER" textFill="#cd2828" textOverrun="WORD_ELLIPSIS">
+      <Button fx:id="generate" disable="true" layoutX="329.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#genKey" prefHeight="25.0" prefWidth="151.0" text="Generate Keywords" textAlignment="CENTER" textFill="#cd2828" textOverrun="WORD_ELLIPSIS">
          <font>
             <Font name="System Bold" size="11.0" />
          </font>
@@ -52,12 +51,18 @@
             <Cursor fx:constant="WAIT" />
          </cursor>
          <effect>
-            <DropShadow height="12.21" radius="6.3375" width="15.14">
-               <color>
-                  <Color opacity="0.4545454680919647" />
-               </color>
-            </DropShadow>
+            <Glow />
          </effect>
+      </Button>
+      <Button fx:id="likeButton" defaultButton="true" disable="true" layoutX="482.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#likeJob" text="Like!">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Button fx:id="dislikeButton" disable="true" layoutX="527.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#dislikeJob" style="-fx-background-color: #ff9999;" text="Dislike!">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
       </Button>
    </children>
 </AnchorPane>

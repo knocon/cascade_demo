@@ -45,6 +45,13 @@ public class JobController implements Initializable {
     private Button editButton;
 
     @FXML
+    private Button likeButton;
+
+    @FXML
+    private Button dislikeButton;
+
+
+    @FXML
     private TableColumn<Job,String> salary;
 
     @FXML
@@ -60,7 +67,9 @@ public class JobController implements Initializable {
     private TableView<Job> jobs_table;
 
     @FXML
-    private TableColumn<Job, Integer> rating;
+    private TableColumn<Job, Integer> likes;
+
+
 
 
 
@@ -84,6 +93,50 @@ public class JobController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Cant load new Window");
+        }
+
+    }
+
+    @FXML
+    void likeJob(MouseEvent event) {
+
+        try{
+
+            neoDbObject.likeOffer(jobs_table.getSelectionModel().getSelectedItem(), activeUser);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation!");
+            alert.setHeaderText("Important information!");
+            alert.setContentText("Joboffer deleted.");
+            alert.showAndWait();
+            refresh(event);
+        }catch(NullPointerException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Information!");
+            alert.setHeaderText("Missing information!");
+            alert.setContentText("Tupel nicht ausgewählt!");
+            alert.showAndWait();
+        }
+
+    }
+
+    @FXML
+    void dislikeJob(MouseEvent event) {
+
+        try{
+
+            neoDbObject.dislikeOffer(jobs_table.getSelectionModel().getSelectedItem(), activeUser);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation!");
+            alert.setHeaderText("Important information!");
+            alert.setContentText("Like deleted.");
+            alert.showAndWait();
+            refresh(event);
+        }catch(NullPointerException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Information!");
+            alert.setHeaderText("Missing information!");
+            alert.setContentText("Tupel nicht ausgewählt!");
+            alert.showAndWait();
         }
 
     }
@@ -137,9 +190,10 @@ public class JobController implements Initializable {
         experience.setCellValueFactory(new PropertyValueFactory<Job, String>("experience"));
         jobdescription.setCellValueFactory(new PropertyValueFactory<Job, String>("jobdescription"));
         salary.setCellValueFactory(new PropertyValueFactory<Job, String>("salary"));
-        rating.setCellValueFactory(new PropertyValueFactory<Job, Integer>("rating"));
+        likes.setCellValueFactory(new PropertyValueFactory<Job, Integer>("likes"));
         jobs_table.getItems().setAll(jobList);
         jobs_table.setFixedCellSize(25);
+        likes.setSortType(TableColumn.SortType.DESCENDING);
         FilteredList<Job> filteredData = new FilteredList<>(jobList, p -> true);
         filter.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(job -> {
@@ -177,6 +231,7 @@ public class JobController implements Initializable {
         experience.setCellValueFactory(new PropertyValueFactory<Job, String>("experience"));
         jobdescription.setCellValueFactory(new PropertyValueFactory<Job, String>("jobdescription"));
         salary.setCellValueFactory(new PropertyValueFactory<Job, String>("salary"));
+        likes.setCellValueFactory(new PropertyValueFactory<Job, Integer>("likes"));
         jobs_table.setItems(jobList);
 
     }

@@ -17,7 +17,7 @@
             <TableColumn fx:id="experience" editable="false" minWidth="0.0" prefWidth="93.0" resizable="false" text="experience" />
             <TableColumn fx:id="salary" editable="false" prefWidth="102.0" resizable="false" text="salary" />
             <TableColumn fx:id="jobdescription" editable="false" prefWidth="220.0" resizable="false" style="-fx-cell-size: 50px;" text="job description" />
-            <TableColumn fx:id="rating" editable="false" prefWidth="45.0" resizable="false" style="-fx-cell-size: 50px;" text="rating" />
+            <TableColumn fx:id="likes" editable="false" prefWidth="45.0" resizable="false" style="-fx-cell-size: 50px;" text="likes" />
             <TableColumn fx:id="debugcode" editable="false" prefWidth="75.0" resizable="false" style="-fx-cell-size: 50px;" text="debugcode" />
         </columns>
       </TableView>

@@ -31,6 +31,7 @@ public class Main extends Application {
     public static ObservableList<Skill> skillsList = FXCollections.observableArrayList();
     public static ObservableList<Skill> userSkillsList = FXCollections.observableArrayList();
     public static ObservableList<Job> jobList = FXCollections.observableArrayList();
+    public static ObservableList<Job> bestJobs = FXCollections.observableArrayList();
     public static ObservableList<String> skillCategorys = FXCollections.observableArrayList();
     public static ArrayList<String> keywords = new ArrayList<>();
 

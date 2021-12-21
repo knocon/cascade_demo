@@ -42,15 +42,15 @@ public class KeywordGen {
 
         for(int i=0;i<result.distinct().getFullKeywords().length;i++){
             if(i==result.distinct().getFullKeywords().length-1) output+=result.distinct().getFullKeywords()[i];
-            else output+=result.distinct().getFullKeywords()[i]+", ";
+            else output+=result.distinct().getFullKeywords()[i]+",";
 
         }
         return output;
 
     }
 
-    public ArrayList<String> generateKeywordsForSearch(ObservableList<Job> input) throws IOException {
-
+    public String generateKeywordsString(String string) throws IOException {
+        String output="";
         String[] stopWords = new SmartWords().getSmartWords();
         String[] stopPOS = {"VB", "VBD", "VBG", "VBN", "VBP", "VBZ"};
         int minWordChar = 1;
@@ -63,30 +63,20 @@ public class KeywordGen {
         String SentDetecURL = "src/main/resources/com/demo/resy/en-sent.bin"; // The path to your sentence detection model
         RakeAlgorithm rakeAlg = new RakeAlgorithm(params, POStaggerURL, SentDetecURL);
 
-        // Call the rake method
-        String txt="";
-        for(Job j : input){
-            String company = j.getCompany();
-            String jobdescription = j.getJobdescription();
-            String jobtitle = j.getJobtitle();
-            String location = j.getLocation();
-             txt += company+", "+jobdescription+", "+jobtitle+", "+location;
-        }
+
+        io.github.crew102.rapidrake.model.Result result = rakeAlg.rake(string);
 
 
 
+        for(int i=0;i<result.distinct().getFullKeywords().length;i++){
+            if(i==result.distinct().getFullKeywords().length-1) output+=result.distinct().getFullKeywords()[i];
+            else output+=result.distinct().getFullKeywords()[i]+",";
 
-        io.github.crew102.rapidrake.model.Result result = rakeAlg.rake(txt);
-
-
-
-        ArrayList<String> output = new ArrayList<>();
-        for(int i=0;i<result.distinct().getFullKeywords().length-1;i++){
-            output.add(result.distinct().getFullKeywords()[i]);
         }
         return output;
 
     }
+
 
 
 

@@ -58,7 +58,7 @@ public class JobCreationController implements Initializable {
             alert.setHeaderText("Important information!");
             alert.setContentText("Done.");
             alert.showAndWait();
-            System.out.println(newJob.getRating());
+            System.out.println(newJob.getLikes());
         }
         else{Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Information!");
