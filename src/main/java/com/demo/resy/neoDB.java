@@ -1,11 +1,8 @@
 package com.demo.resy;
 
-import io.github.crew102.rapidrake.RakeAlgorithm;
-import io.github.crew102.rapidrake.data.SmartWords;
-import io.github.crew102.rapidrake.model.RakeParams;
 import javafx.collections.ObservableList;
-import org.neo4j.driver.*;
 import org.neo4j.driver.Record;
+import org.neo4j.driver.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -92,6 +88,12 @@ public class neoDB implements AutoCloseable {
     private static List<Record> hilfsMethodeJobs(Transaction tx) {
         return tx.run("MATCH(j:Job)\n" +
                 "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary, j.likes, j.keywords").list();
+    }
+
+    private static List<Record> hilfsMethodeJobsLiked(Transaction tx) {
+        return tx.run("MATCH(u:User)-[l:likes]->(j:Job)\n" +
+                "WHERE u.username='"+Main.activeUser.getUsername()+"'\n" +
+                "RETURN id(j), j.jobtitle, j.company, j.keywords, j.likes, j.location, j.salary, j.experience, j.jobdescription").list();
     }
 
     private static List<Record> hilfsMethodeUnwind(Transaction tx, Record rec) {
@@ -408,6 +410,38 @@ public class neoDB implements AutoCloseable {
             }
 
 
+        }
+    }
+
+    public void readLikedJobs() {
+        Main.likedJobList.removeAll(Main.likedJobList);
+
+        try (Session session = driver.session()) {
+            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result job = transaction.run("MATCH(u:User)-[l:likes]->(j:Job)\n" +
+                            "WHERE u.username='" + Main.activeUser.getUsername() + "'\n" +
+                            "RETURN id(j), j.jobtitle, j.company, j.keywords, j.likes, j.location, j.salary, j.experience, j.jobdescription");
+                    return hilfsMethodeJobsLiked(transaction);
+                }
+            });
+
+            try {
+                for (Record item : puffer) {
+
+                    Map<String, Object> map = item.asMap();
+                    String ratingS = map.get("j.likes").toString();
+                    int likes = Integer.parseInt(ratingS);
+                    Job j = new Job(map.get("j.jobtitle").toString(), map.get("j.company").toString(), map.get("j.location").toString(), map.get("j.experience").toString(), map.get("j.salary").toString(), map.get("j.jobdescription").toString(), likes);
+                    j.setJobid(map.get("id(j)").toString());
+                    j.setKeywords(map.get("j.keywords").toString().split(", "));
+                    Main.likedJobList.add(j);
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                System.out.println("Error in loading data.");
+            }
         }
     }
 

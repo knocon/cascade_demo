@@ -14,6 +14,7 @@ module com.demo.resy {
     requires org.neo4j.driver;
     requires rapidrake;
     requires javafx.graphics;
+    requires java.string.similarity;
 
     opens com.demo.resy to javafx.fxml;
     exports com.demo.resy;

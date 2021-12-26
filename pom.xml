@@ -16,6 +16,14 @@
 
     <dependencies>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
+        <dependency>
+            <groupId>info.debatty</groupId>
+            <artifactId>java-string-similarity</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+
+
         <dependency>
             <groupId>io.github.crew102</groupId>
             <artifactId>rapidrake</artifactId>

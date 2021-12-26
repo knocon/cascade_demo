@@ -12,6 +12,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="mysql.connector.java" level="project" />
     <orderEntry type="library" exported="" name="rake-1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: info.debatty:java-string-similarity:2.0.0" level="project" />
+    <orderEntry type="library" name="Maven: net.jcip:jcip-annotations:1.0" level="project" />
     <orderEntry type="library" name="Maven: io.github.crew102:rapidrake:0.1.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.opennlp:opennlp-tools:1.8.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.plugins:maven-javadoc-plugin:2.9.1" level="project" />

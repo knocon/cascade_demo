@@ -1,7 +1,6 @@
 package com.demo.resy;
 
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,15 +14,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
 import java.net.URL;
-import java.security.Key;
-import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.demo.resy.Main.*;
+import static com.demo.resy.Main.neoDbObject;
 
 
 public class MainController implements Initializable {
@@ -68,7 +64,7 @@ public class MainController implements Initializable {
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.getIcons().add(new Image("file:C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\ca.png"));
+            stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
             stage.setTitle("Cascade - Login");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
@@ -89,7 +85,7 @@ public class MainController implements Initializable {
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.getIcons().add(new Image("file:C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\ca.png"));
+            stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
             stage.setTitle("Cascade - Registrierung");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
@@ -110,7 +106,7 @@ public class MainController implements Initializable {
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.getIcons().add(new Image("file:C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\ca.png"));
+            stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
             stage.setTitle("Cascade - Kontoeinstellungen");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
@@ -136,7 +132,7 @@ public class MainController implements Initializable {
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.getIcons().add(new Image("file:C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\ca.png"));
+            stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
             stage.setTitle("Cascade - Jobverwaltung");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));

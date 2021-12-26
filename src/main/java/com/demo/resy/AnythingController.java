@@ -2,7 +2,6 @@ package com.demo.resy;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -108,13 +107,12 @@ public class AnythingController implements Initializable {
             jobs_table.setFixedCellSize(57);
 
             jobList.sort(Comparator.comparing(Job::getLikes));
-            int bestrating = jobList.get(jobList.size()-1).getLikes();
-            int secondbestrating = jobList.get(jobList.size()-2).getLikes();
+            int[] likes = calculateRatings(jobList);
             for(Job job: jobList){
                 /**
                  * generate list of top rated jobs.
                  */
-                if(job.getLikes() == bestrating || job.getLikes() == secondbestrating){
+                if(job.getLikes() == likes[0] || job.getLikes() == likes[1]  || job.getLikes() == likes[2] ){
                     //TODO: Duplikate entfernen.
                     job.setDebugcode("NPR");
                     bestJobs.add(job);
@@ -189,13 +187,16 @@ public class AnythingController implements Initializable {
             jobs_table.setFixedCellSize(57);
 
             jobList.sort(Comparator.comparing(Job::getLikes));
-            int bestrating = jobList.get(jobList.size()-1).getLikes();
-            int secondbestrating = jobList.get(jobList.size()-2).getLikes();
+            /**
+             * Best to worst ratings
+             */
+            int[] ratings = calculateRatings(jobList);
+
             for(Job job: jobList){
                 /**
                  * generate list of top rated jobs.
                  */
-                if(job.getLikes() == bestrating || job.getLikes() == secondbestrating){
+                if(job.getLikes() == ratings[0] || job.getLikes() == ratings[1] || job.getLikes() == ratings[2] ){
                     //TODO: Duplikate entfernen.
                     job.setDebugcode("NPR");
                     bestJobs.add(job);
@@ -220,5 +221,94 @@ public class AnythingController implements Initializable {
         return output;
     }
 
+    public int[] calculateRatings(ObservableList<Job> input){
+        int[] erg ={0,0,0,0,0,0,0,0,0,0};
+        erg[0] = input.get(input.size()-1).getLikes();
 
+        for(int i=jobList.size()-1;i>0;i--){
+
+            if(jobList.get(i).getLikes()<erg[0]) {
+                erg[1] = jobList.get(i).getLikes();
+                break;
+            }
+
+        }
+
+        for(int i=jobList.size()-1;i>0;i--){
+
+            if(jobList.get(i).getLikes()<erg[1]) {
+                erg[2] = jobList.get(i).getLikes();
+                break;
+            }
+
+        }
+
+        for(int i=jobList.size()-1;i>0;i--){
+
+            if(jobList.get(i).getLikes()<erg[2]) {
+                erg[3] = jobList.get(i).getLikes();
+                break;
+            }
+
+        }
+
+        for(int i=jobList.size()-1;i>0;i--){
+
+            if(jobList.get(i).getLikes()<erg[3]) {
+                erg[4] = jobList.get(i).getLikes();
+                break;
+            }
+
+        }
+
+        for(int i=jobList.size()-1;i>0;i--){
+
+            if(jobList.get(i).getLikes()<erg[4]) {
+                erg[5] = jobList.get(i).getLikes();
+                break;
+            }
+
+        }
+
+        for(int i=jobList.size()-1;i>0;i--){
+
+            if(jobList.get(i).getLikes()<erg[5]) {
+                erg[6] = jobList.get(i).getLikes();
+                break;
+            }
+
+        }
+
+        for(int i=jobList.size()-1;i>0;i--){
+
+            if(jobList.get(i).getLikes()<erg[6]) {
+                erg[7] = jobList.get(i).getLikes();
+                break;
+            }
+
+        }
+
+        for(int i=jobList.size()-1;i>0;i--){
+
+            if(jobList.get(i).getLikes()<erg[7]) {
+                erg[8] = jobList.get(i).getLikes();
+                break;
+            }
+
+        }
+
+        for(int i=jobList.size()-1;i>0;i--){
+
+            if(jobList.get(i).getLikes()<erg[8]) {
+                erg[9] = jobList.get(i).getLikes();
+                break;
+            }
+
+        }
+
+
+        System.out.println("Calculated Ratings: r1["+erg[0]+"], r2["+erg[1]+"], r3["+erg[2]+"] r4["+erg[3]+"] r5["+erg[4]+"] r6["+erg[5]+"] r7["+erg[6]+"] r8["+erg[7]+"] r9["+erg[8]+"] r10["+erg[9]+"]");
+
+        return erg;
+    }
 }
