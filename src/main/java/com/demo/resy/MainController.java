@@ -119,6 +119,7 @@ public class MainController implements Initializable {
 
 
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Cant load new Window");
         }
 

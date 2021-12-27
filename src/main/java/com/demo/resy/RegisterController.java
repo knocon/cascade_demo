@@ -115,9 +115,9 @@ public class RegisterController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ObservableList<String> genders = FXCollections.observableArrayList();
-        genders.add("Male");
-        genders.add("Female");
-        genders.add("?");
+        genders.add("m");
+        genders.add("f");
+        genders.add("d");
         gender.setItems(genders);
     }
 }

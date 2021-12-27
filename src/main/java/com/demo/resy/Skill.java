@@ -4,7 +4,6 @@ package com.demo.resy;
 public class Skill {
     private String skillname;
     private String description;
-    private String category;
 
     public String getSkillname() {
         return skillname;
@@ -22,17 +21,11 @@ public class Skill {
         this.description = description;
     }
 
-    public String getCategory() {
-        return category;
-    }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
 
-    public Skill(String skillname, String description, String category) {
+    public Skill(String skillname, String description) {
         this.skillname = skillname;
         this.description = description;
-        this.category = category;
+
     }
 }

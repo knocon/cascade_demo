@@ -3,19 +3,13 @@ package com.demo.resy;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.demo.resy.Main.*;
@@ -84,7 +78,6 @@ public class KontoController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         neoDbObject.readSkills();
         skills_column.setCellValueFactory(new PropertyValueFactory<Skill, String>("skillname"));
-        category_column.setCellValueFactory(new PropertyValueFactory<Skill, String>("category"));
         description_column.setCellValueFactory(new PropertyValueFactory<Skill, String>("description"));
         skills_table.getItems().setAll(skillsList);
 
@@ -101,8 +94,7 @@ public class KontoController implements Initializable {
 
                 if (skill.getSkillname().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
-                } else if (skill.getCategory().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
+
                 }
                 return false;
             });
@@ -118,7 +110,6 @@ public class KontoController implements Initializable {
          */
         neoDbObject.readUserSkills();
         skills_column2.setCellValueFactory(new PropertyValueFactory<Skill, String>("skillname"));
-        category_column2.setCellValueFactory(new PropertyValueFactory<Skill, String>("category"));
         description_column2.setCellValueFactory(new PropertyValueFactory<Skill, String>("description"));
         skillsuser_table.getItems().setAll(userSkillsList);
 
@@ -135,9 +126,8 @@ public class KontoController implements Initializable {
 
                 if (skill.getSkillname().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
-                } else if (skill.getCategory().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
                 }
+
                 return false;
             });
         });
@@ -188,7 +178,6 @@ public class KontoController implements Initializable {
     void refresh(MouseEvent event) {
         neoDbObject.readSkills();
         skills_column.setCellValueFactory(new PropertyValueFactory<Skill, String>("skillname"));
-        category_column.setCellValueFactory(new PropertyValueFactory<Skill, String>("category"));
         description_column.setCellValueFactory(new PropertyValueFactory<Skill, String>("description"));
         skills_table.setItems(skillsList);
         /**
@@ -197,7 +186,6 @@ public class KontoController implements Initializable {
          */
         neoDbObject.readUserSkills();
         skills_column2.setCellValueFactory(new PropertyValueFactory<Skill, String>("skillname"));
-        category_column2.setCellValueFactory(new PropertyValueFactory<Skill, String>("category"));
         description_column2.setCellValueFactory(new PropertyValueFactory<Skill, String>("description"));
         skillsuser_table.setItems(userSkillsList);
 

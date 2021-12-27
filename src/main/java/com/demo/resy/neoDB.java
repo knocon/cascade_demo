@@ -82,7 +82,7 @@ public class neoDB implements AutoCloseable {
      */
     private static List<Record> hilfsMethode(Transaction tx) {
         return tx.run("MATCH(n:Skill)\n" +
-                "RETURN id(n), n.skillname, n.description, n.category").list();
+                "RETURN id(n), n.skillname, n.skilldescription").list();
     }
 
     private static List<Record> hilfsMethodeJobs(Transaction tx) {
@@ -109,7 +109,7 @@ public class neoDB implements AutoCloseable {
     private static List<Record> hilfsMethodeUserSkills(Transaction tx) {
         String username = Main.activeUser.getUsername();
         return tx.run("MATCH(u:User{username:'"+username+"'})-[r:has_skill]->(s:Skill)\n" +
-                "RETURN s.skillname, s.description").list();
+                "RETURN s.skillname, s.skilldescription").list();
     }
 
     private static List<Record> hilfsMethodeSkillCategorys(Transaction tx) {
@@ -288,7 +288,6 @@ public class neoDB implements AutoCloseable {
                             "MATCH (u:User{username:'"+username+"'}), (s:Skill{skillname:'"+skill+"'})\n" +
                             "WHERE NOT (u)-[:has_skill]->(s)\n" +
                             "CREATE (u)-[rsu:has_skill]->(s)\n" +
-                            "CREATE (s)-[rus:has_user]->(u)\n" +
                             "RETURN type(rsu) ");
                     return null;
                 }
@@ -367,14 +366,14 @@ public class neoDB implements AutoCloseable {
                 @Override
                 public List<Record> execute(Transaction transaction) {
                     Result skillname = transaction.run("MATCH(n:Skill)\n" +
-                            "RETURN id(n), n.skillname, n.description, n.category");
+                            "RETURN id(n), n.skillname, n.skilldescription");
                     return hilfsMethode(transaction);
                 }
             });
 
             for (Record item : puffer) {
                 Map<String, Object> map = item.asMap();
-                Skill s = new Skill((String) map.get("n.skillname"), (String) map.get("n.description"), (String) map.get("n.category"));
+                Skill s = new Skill((String) map.get("n.skillname"), (String) map.get("n.skilldescription"));
                 Main.skillsList.add(s);
             }
 
@@ -455,14 +454,14 @@ public class neoDB implements AutoCloseable {
                 @Override
                 public List<Record> execute(Transaction transaction) {
                     Result result = transaction.run("MATCH(u:User{username:'"+username+"'})-[r:has_skill]->(s:Skill)\n" +
-                            "RETURN s.skillname, s.description");
+                            "RETURN s.skillname, s.skilldescription");
                     return hilfsMethodeUserSkills(transaction);
                 }
             });
 
             for (Record item : puffer) {
                 Map<String, Object> map = item.asMap();
-                Skill s = new Skill((String) map.get("s.skillname"), (String) map.get("s.description"), (String) map.get("s.category"));
+                Skill s = new Skill((String) map.get("s.skillname"), (String) map.get("s.skilldescription"));
                 Main.userSkillsList.add(s);
             }
 
@@ -493,7 +492,7 @@ public class neoDB implements AutoCloseable {
                 String jobdescription = attributes[5];
 
                 String generateKeywords ="";
-                generateKeywords+= company+","+jobdescription+","+jobtitel+","+location;
+                generateKeywords+= company+","+jobtitel+","+location;
 
 
                 try (Session session = driver.session()) {
@@ -514,6 +513,143 @@ public class neoDB implements AutoCloseable {
                 }
 
                 line = br.readLine();}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void createSkillsCSV(){
+        Path pathToFile = Paths.get("src/main/resources/com/demo/resy/jobdata/masterskills.txt");
+
+        try (BufferedReader br = Files.newBufferedReader(pathToFile,
+                StandardCharsets.ISO_8859_1)) {
+            String line = br.readLine();
+            String line1 = br.readLine();
+            String line2 = br.readLine();
+            String line3 = br.readLine();
+
+            while(line!=null&&line1!=null&&line2!=null&&line3!=null){
+
+                String[] attributes = line.split(";");
+                String skillname = attributes[0];
+                String skilldescription = attributes[1];
+
+                String[] attributes2 = line1.split(";");
+                String skillname2 = attributes2[0];
+                String skilldescription2 = attributes2[1];
+
+                String[] attributes3 = line2.split(";");
+                String skillname3 = attributes3[0];
+                String skilldescription3 = attributes3[1];
+
+                String[] attributes4 = line3.split(";");
+                String skillname4 = attributes4[0];
+                String skilldescription4 = attributes4[1];
+
+                try (Session session = driver.session()) {
+                    String registerUser = session.writeTransaction(new TransactionWork<String>() {
+                        @Override
+                        public String execute(Transaction transaction){
+
+                            Result result = transaction.run("CREATE (:Skill{skillname:'"+skillname+"', skilldescription:'"+skilldescription+"'})"+
+                                    "CREATE (:Skill{skillname:'"+skillname2+"', skilldescription:'"+skilldescription2+"'})\n" +
+                                    "CREATE (:Skill{skillname:'"+skillname3+"', skilldescription:'"+skilldescription3+"'})\n" +
+                                    "CREATE (:Skill{skillname:'"+skillname4+"', skilldescription:'"+skilldescription4+"'})");
+
+                            System.out.println("Skill "+skillname+" created.");
+                            return null;
+
+                        }
+                    });
+                }
+                line = br.readLine();
+                line1 = br.readLine();
+                line2 = br.readLine();
+                line3 = br.readLine();
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void createUsersCSV(){
+        Path pathToFile = Paths.get("src/main/resources/com/demo/resy/jobdata/masterusers.txt");
+        try (BufferedReader br = Files.newBufferedReader(pathToFile,
+                StandardCharsets.ISO_8859_1)) {
+            String line = br.readLine();
+            String line1 = br.readLine();
+            String line2 = br.readLine();
+            String line3 = br.readLine();
+
+            while(line!=null&&line1!=null&&line2!=null&&line3!=null){
+
+                String[] attributes = line.split(";");
+                String gender = attributes[1];
+                String firstname = attributes[2];
+                String lastname = attributes[3];
+                String password = attributes[4];
+                String plz = attributes[5];
+                String town = attributes[6];
+                String email = attributes[7];
+                String country = attributes[8];
+
+
+                String[] attributes1 = line1.split(";");
+                String gender1 = attributes1[1];
+                String firstname1 = attributes1[2];
+                String lastname1 = attributes1[3];
+                String password1 = attributes1[4];
+                String plz1 = attributes1[5];
+                String town1 = attributes1[6];
+                String email1 = attributes1[7];
+                String country1 = attributes1[8];
+
+                String[] attributes2 = line2.split(";");
+                String gender2 = attributes2[1];
+                String firstname2 = attributes2[2];
+                String lastname2 = attributes2[3];
+                String password2 = attributes2[4];
+                String plz2 = attributes2[5];
+                String town2 = attributes2[6];
+                String email2 = attributes2[7];
+                String country2 = attributes2[8];
+
+                String[] attributes3 = line3.split(";");
+                String gender3 = attributes3[1];
+                String firstname3 = attributes3[2];
+                String lastname3 = attributes3[3];
+                String password3 = attributes3[4];
+                String plz3 = attributes3[5];
+                String town3 = attributes3[6];
+                String email3 = attributes3[7];
+                String country3 = attributes3[8];
+
+
+                try (Session session = driver.session()) {
+                    String registerUser = session.writeTransaction(new TransactionWork<String>() {
+                        @Override
+                        public String execute(Transaction transaction){
+
+                            Result result = transaction.run("CREATE (:User{username:'"+lastname+firstname+"', email:'"+email+"', password:'"+password+"', firstname:'"+firstname+"', lastname:'"+lastname+"', gender:'"+gender+"', country:'"+country+"', town:'"+town+"', plz:'"+plz+"'})\n" +
+                                    "CREATE (:User{username:'"+lastname1+firstname1+"', email:'"+email1+"', password:'"+password1+"', firstname:'"+firstname1+"', lastname:'"+lastname1+"', gender:'"+gender1+"', country:'"+country1+"', town:'"+town1+"', plz:'"+plz1+"'})\n"+
+                                    "CREATE (:User{username:'"+lastname2+firstname2+"', email:'"+email2+"', password:'"+password2+"', firstname:'"+firstname2+"', lastname:'"+lastname2+"', gender:'"+gender2+"', country:'"+country2+"', town:'"+town2+"', plz:'"+plz2+"'})\n"+
+                                    "CREATE (:User{username:'"+lastname3+firstname3+"', email:'"+email3+"', password:'"+password3+"', firstname:'"+firstname3+"', lastname:'"+lastname3+"', gender:'"+gender3+"', country:'"+country3+"', town:'"+town3+"', plz:'"+plz3+"'})\n");
+                            System.out.println("User created.");
+                            return null;
+
+                        }
+                    });
+                }
+                line = br.readLine();
+                line1 = br.readLine();
+                line2 = br.readLine();
+                line3 = br.readLine();
+
+
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
