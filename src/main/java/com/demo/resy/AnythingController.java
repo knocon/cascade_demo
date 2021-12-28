@@ -113,7 +113,6 @@ public class AnythingController implements Initializable {
                  * generate list of top rated jobs.
                  */
                 if(job.getLikes() == likes[0] || job.getLikes() == likes[1]  || job.getLikes() == likes[2] ){
-                    //TODO: Duplikate entfernen.
                     job.setDebugcode("NPR");
                     bestJobs.add(job);
                 }
@@ -197,7 +196,6 @@ public class AnythingController implements Initializable {
                  * generate list of top rated jobs.
                  */
                 if(job.getLikes() == ratings[0] || job.getLikes() == ratings[1] || job.getLikes() == ratings[2] ){
-                    //TODO: Duplikate entfernen.
                     job.setDebugcode("NPR");
                     bestJobs.add(job);
                 }

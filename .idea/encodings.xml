@@ -4,5 +4,7 @@
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources/com/demo/resy/jobdata/1.TXT" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/com/demo/resy/jobdata/masterusers.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/com/demo/resy/jobdata/masterusers.txt" charset="ISO-8859-1" />
   </component>
 </project>

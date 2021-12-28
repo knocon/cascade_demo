@@ -1,5 +1,6 @@
 package com.demo.resy;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.*;
@@ -12,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Logger;
 
 //CYPHER
@@ -88,6 +90,11 @@ public class neoDB implements AutoCloseable {
     private static List<Record> hilfsMethodeJobs(Transaction tx) {
         return tx.run("MATCH(j:Job)\n" +
                 "RETURN id(j), j.jobtitle, j.company, j.jobdescription, j.location, j.experience, j.salary, j.likes, j.keywords").list();
+    }
+
+    private static List<Record> hilfsMethodeUser(Transaction tx) {
+        return tx.run("MATCH(u:User)\n" +
+                "RETURN id(u), u.country, u.email, u.firstname, u.lastname , u.password, u.plz, u.town, u.username, u.gender").list();
     }
 
     private static List<Record> hilfsMethodeJobsLiked(Transaction tx) {
@@ -226,33 +233,68 @@ public class neoDB implements AutoCloseable {
         }
     }
 
-    /**
-     * DEAD FUNCTION
-     * @param input
-     */
-    public void createOfferRelationship(final Job input) {
-        /*try (Session session = driver.session()) {
-            final String jn = input.getJobname();
-            final ObservableList<String> skills_selected = input.getJobskills();
-            int size = skills_selected.size();
-            String outputstring="";
-            for(int i=0;i<size;i++){
-                if(i<size-1)outputstring+="s.skillname='"+skills_selected.get(i)+"' OR ";
-                else outputstring+="s.skillname='"+skills_selected.get(i)+"'";
-            }
-            String finalOutputstring = outputstring;
-            String registerUser = session.writeTransaction(new TransactionWork<String>() {
-                @Override
-                public String execute(Transaction transaction){
-                    Result result = transaction.run("MATCH(j:Job),(s:Skill)\n" +
-                            "WHERE j.jobname='"+jn+"' AND ("+ finalOutputstring +")\n" +
-                            "CREATE (j)-[r:needs_skill]->(s)");
-                    System.out.println("Job-Relationship created.");
-                    return null;
+    public ObservableList<Job> randomJobs(ObservableList<Job> input){
+        Random rand = new Random();
+        ObservableList<Job> output = FXCollections.observableArrayList();
 
-                }
-            });
-        }*/
+        for(int i=0; i<10; i++){
+            int randomIndex = rand.nextInt(input.size());
+            Job j = input.get(randomIndex);
+            output.add(j);
+            input.remove(randomIndex);
+        }
+
+        return output;
+    }
+
+    public ObservableList<Skill> randomSkills(ObservableList<Skill> input){
+        Random rand = new Random();
+        ObservableList<Skill> copy = FXCollections.observableArrayList();
+        copy.addAll(input);
+        ObservableList<Skill> output = FXCollections.observableArrayList();
+
+        for(int i=0; i<10; i++){
+            int randomIndex = rand.nextInt(copy.size());
+            Skill s = copy.get(randomIndex);
+            output.add(s);
+            copy.remove(randomIndex);
+        }
+
+        return output;
+    }
+
+
+    public void assignRandomSkillsToUsers() {
+
+        for(User u : Main.userList){
+            ObservableList<Skill> skills = randomSkills(Main.skillsList);
+
+            try(Session session = driver.session()){
+                String assignSkills = session.writeTransaction(new TransactionWork<String>() {
+                    @Override
+                    public String execute(Transaction transaction) {
+                        Result result = transaction.run("\n" +
+                                "MATCH (u:User{username:'"+u.getUsername()+"'}), (s0:Skill{skillname:'"+skills.get(0).getSkillname()+"'}), (s1:Skill{skillname:'"+skills.get(1).getSkillname()+"'}), (s2:Skill{skillname:'"+skills.get(2).getSkillname()+"'}), (s3:Skill{skillname:'"+skills.get(3).getSkillname()+"'}), (s4:Skill{skillname:'"+skills.get(4).getSkillname()+"'}),(s5:Skill{skillname:'"+skills.get(5).getSkillname()+"'}),(s6:Skill{skillname:'"+skills.get(6).getSkillname()+"'}),(s7:Skill{skillname:'"+skills.get(7).getSkillname()+"'}),(s8:Skill{skillname:'"+skills.get(8).getSkillname()+"'}), (s9:Skill{skillname:'"+skills.get(9).getSkillname()+"'})\n" +
+                                "CREATE (u)-[:has_skill]->(s0)\n" +
+                                "CREATE (u)-[:has_skill]->(s1)\n" +
+                                "CREATE (u)-[:has_skill]->(s2)\n" +
+                                "CREATE (u)-[:has_skill]->(s3)\n" +
+                                "CREATE (u)-[:has_skill]->(s4)\n" +
+                                "CREATE (u)-[:has_skill]->(s5)\n" +
+                                "CREATE (u)-[:has_skill]->(s6)\n" +
+                                "CREATE (u)-[:has_skill]->(s7)\n" +
+                                "CREATE (u)-[:has_skill]->(s8)\n" +
+                                "CREATE (u)-[:has_skill]->(s9)");
+
+                        System.out.println(u.getId()+" created skill connection to:"+skills.get(0)+" "+skills.get(1)+" "+skills.get(2)+" "+skills.get(3)+" "+skills.get(4)+" "+skills.get(5)+" "+skills.get(6)+" "+skills.get(7)+" "+skills.get(8)+" "+skills.get(9));
+                        System.out.println(Main.skillsList.size());
+                        return null;
+                    }
+                });
+            }
+
+        }
+
     }
     /**
      * DEAD FUNCTION
@@ -380,7 +422,6 @@ public class neoDB implements AutoCloseable {
 
         }
     }
-    //TODO: Methode verbessern
     public void readJobs() {
         Main.jobList.removeAll(Main.jobList);
         try (Session session = driver.session()) {
@@ -402,6 +443,34 @@ public class neoDB implements AutoCloseable {
                     j.setJobid(map.get("id(j)").toString());
                     j.setKeywords(map.get("j.keywords").toString().split(", "));
                     Main.jobList.add(j);
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                System.out.println("Error in loading data.");
+            }
+
+
+        }
+    }
+
+    public void readUsers() {
+        Main.userList.removeAll(Main.userList);
+        try (Session session = driver.session()) {
+            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result user = transaction.run("MATCH(u:User)\n" +
+                            "RETURN id(u), u.country, u.email, u.firstname, u.lastname , u.password, u.plz, u.town, u.username, u.gender");
+                    return hilfsMethodeUser(transaction);
+                }
+            });
+
+            try {
+                for (Record item : puffer) {
+                    Map<String, Object> map = item.asMap();
+                    User u = new User(map.get("u.username").toString(), map.get("u.email").toString(), map.get("u.password").toString(), map.get("u.firstname").toString(), map.get("u.lastname").toString(), map.get("u.gender").toString(), map.get("u.country").toString(), map.get("u.town").toString(), map.get("u.plz").toString());
+                    u.setId(map.get("id(u)").toString());
+                    Main.userList.add(u);
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();
@@ -656,6 +725,11 @@ public class neoDB implements AutoCloseable {
 
     }
 
+
+    //TODO: Create User -> Skill relationships randomly.
+
+
+    //TODO: Find similar user.
 
 
 }

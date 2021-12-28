@@ -23,6 +23,7 @@ public class Main extends Application {
     public static KeywordGen keywordGen = new KeywordGen();
     public static ObservableList<Skill> skillsList = FXCollections.observableArrayList();
     public static ObservableList<Skill> userSkillsList = FXCollections.observableArrayList();
+    public static ObservableList<User> userList = FXCollections.observableArrayList();
     public static ObservableList<Job> jobList = FXCollections.observableArrayList();
     public static ObservableList<Job> likedJobList = FXCollections.observableArrayList();
     public static ObservableList<Job> bestJobs = FXCollections.observableArrayList();
@@ -57,6 +58,9 @@ public class Main extends Application {
 
     public static void main(String[] args) throws SQLException, IOException {
         System.out.println("Java-FX Launch pending...");
+/*        neoDbObject.readUsers();
+        neoDbObject.readSkills();
+        neoDbObject.assignRandomSkillsToUsers();*/
         launch();
         System.out.println("Java-FX exit.");
     }

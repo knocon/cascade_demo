@@ -48,7 +48,6 @@ public class JobCreationController implements Initializable {
     @FXML
     void createOffer(MouseEvent event) {
 
-        //TODO: REGEX BEI EXPERIENCE&SALARY
 
         if(jobtitle.getText()!="" && company.getText()!="" && location.getText()!="" && experience.getText()!="" && salary.getText()!="" && description.getText()!=""){
             Job newJob = new Job(jobtitle.getText(), company.getText(), location.getText(), experience.getText(), salary.getText(), description.getText(), 0);

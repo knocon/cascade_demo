@@ -119,7 +119,6 @@ public class SearchController implements Initializable {
                  * generate list of top rated jobs.
                  */
                 if(job.getLikes() == bestrating || job.getLikes() == secondbestrating){
-                    //TODO: Duplikate entfernen.
                     job.setDebugcode("NPR");
                     bestJobs.add(job);
                 }

@@ -1,13 +1,24 @@
 package com.demo.resy;
 
 public class User {
-    //TODO: User anpassen. Mehr Angaben, auch bei der Registration.
     private String username;
     private String email;
     private String password;
     private String firstname;
     private String lastname;
+    private String country;
+    private String town;
+    private String postcode;
     private String gender;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public User() {
 
@@ -61,14 +72,8 @@ public class User {
         this.postcode = postcode;
     }
 
-    public void setSkills(int[] skills) {
-        this.skills = skills;
-    }
 
-    private String country;
-    private String town;
-    private String postcode;
-    private int[] skills;
+
 
     public User(String username, String email, String password, String firstname, String lastname, String gender, String country, String town, String postcode) {
         this.username = username;
@@ -106,7 +111,5 @@ public class User {
         this.password = password;
     }
 
-    public int[] getSkills() {
-        return skills;
-    }
+
 }
