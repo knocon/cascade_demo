@@ -177,10 +177,17 @@ public class neoDB implements AutoCloseable {
             final String username = user.getUsername();
             final String email = user.getEmail();
             final String password = user.getPassword();
+            final String country = user.getCountry();
+            final String firstname = user.getFirstname();
+            final String gender = user.getGender();
+            final String lastname = user.getLastname();
+            final String plz = user.getPostcode();
+            final String town = user.getTown();
+
             String registerUser = session.writeTransaction(new TransactionWork<String>() {
                 @Override
                 public String execute(Transaction transaction) {
-                    Result result = transaction.run("CREATE (n:User {username: '" + username + "', email: '" + email + "', password: '" + password + "'})");
+                    Result result = transaction.run("CREATE (n:User {username: '" + username + "', email: '" + email + "', country: '" + country + "', firstname: '" + firstname + "', gender: '" + gender + "', lastname: '" + lastname + "', plz: '" + plz + "', town: '" + town + "', password: '" + password + "'})");
                     return null;
                 }
             });
