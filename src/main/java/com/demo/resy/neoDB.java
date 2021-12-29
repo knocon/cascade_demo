@@ -83,8 +83,13 @@ public class neoDB implements AutoCloseable {
      * @return List<Record>
      */
     private static List<Record> hilfsMethode(Transaction tx) {
-        return tx.run("MATCH(n:Skill)\n" +
-                "RETURN id(n), n.skillname, n.skilldescription").list();
+        return tx.run("MATCH(n:User{username:'"+Main.activeUser.getUsername()+"'})\n" +
+                "RETURN id(n), n.country, n.firstname, n.password, n.town, n.gender, n.update, n.email, n.plz, n.lastname, n.username").list();
+    }
+
+    private static List<Record> hilfsMethodeRefreshUser(Transaction tx) {
+        return tx.run("MATCH(n:User{username:'"+Main.activeUser.getUsername()+"'})\n" +
+                "RETURN id(n), n.country, n.firstname, n.password, n.town, n.gender, n.update, n.email, n.plz, n.lastname, n.username").list();
     }
 
     private static List<Record> hilfsMethodeJobs(Transaction tx) {
@@ -97,9 +102,34 @@ public class neoDB implements AutoCloseable {
                 "RETURN id(u), u.country, u.email, u.firstname, u.lastname , u.password, u.plz, u.town, u.username, u.gender").list();
     }
 
+    private static List<Record> hilfsMethodeSimilarUser(Transaction tx) {
+        return tx.run("MATCH (activeUser:User)-[:has_skill]->(s:Skill)<-[has_skill]-(compareUser:User)\n" +
+        "WHERE id(activeUser)="+Main.activeUser.getId()+"\n" +
+                "RETURN id(compareUser), compareUser.country, compareUser.email, compareUser.firstname, compareUser.gender, compareUser.lastname, compareUser.password, compareUser.plz, compareUser.town, compareUser.username").list();
+    }
+
+    private static List<Record> hilfsMethodeSimilarUserByLikedJobs(Transaction tx) {
+        return tx.run("MATCH (activeUser:User)-[:has_skill]->(s:Skill)<-[has_skill]-(compareUser:User)\n" +
+                "WHERE id(activeUser)="+Main.activeUser.getId()+"\n" +
+                "RETURN id(compareUser), compareUser.country, compareUser.email, compareUser.firstname, compareUser.gender, compareUser.lastname, compareUser.password, compareUser.plz, compareUser.town, compareUser.username").list();
+    }
+
+    private static List<Record> hilfsMethodeSimilarUserL2(Transaction tx) {
+        return tx.run("MATCH (activeUser:User)-[:has_skill]->(s:Skill)<-[:has_skill]-(compareUser:User)\n" +
+                "MATCH (activeUser:User)-[:likes]->(j:Job)<-[:likes]-(compareUser:User)\n" +
+                "WHERE id(activeUser)="+Main.activeUser.getId()+"\n" +
+                "RETURN id(compareUser), compareUser.country, compareUser.email, compareUser.firstname, compareUser.gender, compareUser.lastname, compareUser.password, compareUser.plz, compareUser.town, compareUser.username").list();
+    }
+
     private static List<Record> hilfsMethodeJobsLiked(Transaction tx) {
         return tx.run("MATCH(u:User)-[l:likes]->(j:Job)\n" +
                 "WHERE u.username='"+Main.activeUser.getUsername()+"'\n" +
+                "RETURN id(j), j.jobtitle, j.company, j.keywords, j.likes, j.location, j.salary, j.experience, j.jobdescription").list();
+    }
+
+    private static List<Record> hilfsMethodeJobsLiked2(Transaction tx, User input) {
+        return tx.run("MATCH(u:User)-[l:likes]->(j:Job)\n" +
+                "WHERE u.username='"+input.getUsername()+"'\n" +
                 "RETURN id(j), j.jobtitle, j.company, j.keywords, j.likes, j.location, j.salary, j.experience, j.jobdescription").list();
     }
 
@@ -140,6 +170,8 @@ public class neoDB implements AutoCloseable {
      *
      * @param user
      */
+
+    //TODO Register fix.
     public void registerUser(final User user) {
         try (Session session = driver.session()) {
             final String username = user.getUsername();
@@ -235,13 +267,15 @@ public class neoDB implements AutoCloseable {
 
     public ObservableList<Job> randomJobs(ObservableList<Job> input){
         Random rand = new Random();
+        ObservableList<Job> copy = FXCollections.observableArrayList();
+        copy.addAll(input);
         ObservableList<Job> output = FXCollections.observableArrayList();
 
         for(int i=0; i<10; i++){
-            int randomIndex = rand.nextInt(input.size());
-            Job j = input.get(randomIndex);
+            int randomIndex = rand.nextInt(copy.size());
+            Job j = copy.get(randomIndex);
             output.add(j);
-            input.remove(randomIndex);
+            copy.remove(randomIndex);
         }
 
         return output;
@@ -287,7 +321,58 @@ public class neoDB implements AutoCloseable {
                                 "CREATE (u)-[:has_skill]->(s9)");
 
                         System.out.println(u.getId()+" created skill connection to:"+skills.get(0)+" "+skills.get(1)+" "+skills.get(2)+" "+skills.get(3)+" "+skills.get(4)+" "+skills.get(5)+" "+skills.get(6)+" "+skills.get(7)+" "+skills.get(8)+" "+skills.get(9));
-                        System.out.println(Main.skillsList.size());
+                        return null;
+                    }
+                });
+            }
+
+        }
+
+    }
+
+    public void assignRandomLikesToUsers() {
+
+        for(User u : Main.userList){
+            ObservableList<Job> jobs = randomJobs(Main.jobList);
+
+            try(Session session = driver.session()){
+                String assignLikes = session.writeTransaction(new TransactionWork<String>() {
+                    @Override
+                    public String execute(Transaction transaction) {
+                        Result result = transaction.run("\n" +
+                                "MATCH (u:User{username:'"+u.getUsername()+"'}),(j0:Job),(j1:Job),(j2:Job),(j3:Job),(j4:Job),(j5:Job),(j6:Job),(j7:Job),(j8:Job),(j9:Job)\n" +
+                                "WHERE id(j0)="+jobs.get(0).getJobid()+"\n" +
+                                "AND id(j1)="+jobs.get(1).getJobid()+"\n" +
+                                "AND id(j2)="+jobs.get(2).getJobid()+"\n" +
+                                "AND id(j3)="+jobs.get(3).getJobid()+"\n" +
+                                "AND id(j4)="+jobs.get(4).getJobid()+"\n" +
+                                "AND id(j5)="+jobs.get(5).getJobid()+"\n" +
+                                "AND id(j6)="+jobs.get(6).getJobid()+"\n" +
+                                "AND id(j7)="+jobs.get(7).getJobid()+"\n" +
+                                "AND id(j8)="+jobs.get(8).getJobid()+"\n" +
+                                "AND id(j9)="+jobs.get(9).getJobid()+"\n" +
+                                "SET j0.likes=j0.likes+1 \n" +
+                                "SET j1.likes=j1.likes+1 \n" +
+                                "SET j2.likes=j2.likes+1 \n" +
+                                "SET j3.likes=j3.likes+1 \n" +
+                                "SET j4.likes=j4.likes+1 \n" +
+                                "SET j5.likes=j5.likes+1 \n" +
+                                "SET j6.likes=j6.likes+1 \n" +
+                                "SET j7.likes=j7.likes+1 \n" +
+                                "SET j8.likes=j8.likes+1 \n" +
+                                "SET j9.likes=j9.likes+1 \n" +
+                                "CREATE (u)-[:likes]->(j0)\n" +
+                                "CREATE (u)-[:likes]->(j1)\n" +
+                                "CREATE (u)-[:likes]->(j2)\n" +
+                                "CREATE (u)-[:likes]->(j3)\n" +
+                                "CREATE (u)-[:likes]->(j4)\n" +
+                                "CREATE (u)-[:likes]->(j5)\n" +
+                                "CREATE (u)-[:likes]->(j6)\n" +
+                                "CREATE (u)-[:likes]->(j7)\n" +
+                                "CREATE (u)-[:likes]->(j8)\n" +
+                                "CREATE (u)-[:likes]->(j9)");
+
+                        System.out.println(u.getId()+" created likes connection to:"+jobs.get(0).getJobid()+" "+jobs.get(1).getJobid()+" "+jobs.get(2).getJobid()+" "+jobs.get(3).getJobid()+" "+jobs.get(4).getJobid()+" "+jobs.get(5).getJobid()+" "+jobs.get(6).getJobid()+" "+jobs.get(7).getJobid()+" "+jobs.get(8).getJobid()+" "+jobs.get(9).getJobid());
                         return null;
                     }
                 });
@@ -394,12 +479,32 @@ public class neoDB implements AutoCloseable {
         return r;
     }
 
-    /**
-     * Mögliche Lösung für Results.
-     *
-     * @param
-     * @return List<Record>
-     */
+    public void refreshActiveUser() {
+        try (Session session = driver.session()) {
+            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result log = transaction.run("MATCH(n:User{username:'"+Main.activeUser.getUsername()+"'})\n" +
+                            "RETURN id(n), n.country, n.firstname, n.password, n.town, n.gender, n.update, n.email, n.plz, n.lastname, n.username");
+                    return hilfsMethodeRefreshUser(transaction);
+                }
+            });
+
+            for (Record item : puffer) {
+                Main.activeUser.setId(item.get("id(n)").toString());
+                Main.activeUser.setCountry(item.get("n.country").toString());
+                Main.activeUser.setTown(item.get("n.town").toString());
+                Main.activeUser.setPostcode(item.get("n.plz").toString());
+                Main.activeUser.setFirstname(item.get("n.firstname").toString());
+                Main.activeUser.setLastname(item.get("n.lastname").toString());
+                Main.activeUser.setGender(item.get("n.gender").toString());
+            }
+
+
+        }
+    }
+
+
 
     public void readSkills() {
         Main.skillsList.removeAll(Main.skillsList);
@@ -481,6 +586,104 @@ public class neoDB implements AutoCloseable {
         }
     }
 
+    public ObservableList<User> findSimilarUsersToActiveUserBySkills() {
+    ObservableList<User> output = FXCollections.observableArrayList();
+        try (Session session = driver.session()) {
+            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result user = transaction.run("MATCH (activeUser:User)-[:has_skill]->(s:Skill)<-[:has_skill]-(compareUser:User)\n" +
+                            "WHERE id(activeUser)="+Main.activeUser.getId()+"\n" +
+                            "RETURN id(compareUser), compareUser.country, compareUser.email, compareUser.firstname, compareUser.gender, compareUser.lastname, compareUser.password, compareUser.plz, compareUser.town, compareUser.username");
+                    return hilfsMethodeSimilarUser(transaction);
+                }
+            });
+
+            try {
+                for (Record item : puffer) {
+                    Map<String, Object> map = item.asMap();
+                    User u = new User(map.get("compareUser.username").toString(), map.get("compareUser.email").toString(), map.get("compareUser.password").toString(), map.get("compareUser.firstname").toString(), map.get("compareUser.lastname").toString(), map.get("compareUser.gender").toString(), map.get("compareUser.country").toString(), map.get("compareUser.town").toString(), map.get("compareUser.plz").toString());
+                    u.setId(map.get("id(compareUser)").toString());
+                   output.add(u);
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                System.out.println("Error in loading data.");
+            }
+
+
+        }
+
+        return output;
+    }
+
+    /**
+     * Not ready yet.
+     * @return
+     */
+    public ObservableList<User> findSimilarUsersToActiveUserByLikedJobs() {
+        ObservableList<User> output = FXCollections.observableArrayList();
+        try (Session session = driver.session()) {
+            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result user = transaction.run("MATCH (activeUser:User)-[:has_skill]->(s:Skill)<-[:has_skill]-(compareUser:User)\n" +
+                            "WHERE id(activeUser)="+Main.activeUser.getId()+"\n" +
+                            "RETURN id(compareUser), compareUser.country, compareUser.email, compareUser.firstname, compareUser.gender, compareUser.lastname, compareUser.password, compareUser.plz, compareUser.town, compareUser.username");
+                    return hilfsMethodeSimilarUserByLikedJobs(transaction);
+                }
+            });
+
+            try {
+                for (Record item : puffer) {
+                    Map<String, Object> map = item.asMap();
+                    User u = new User(map.get("compareUser.username").toString(), map.get("compareUser.email").toString(), map.get("compareUser.password").toString(), map.get("compareUser.firstname").toString(), map.get("compareUser.lastname").toString(), map.get("compareUser.gender").toString(), map.get("compareUser.country").toString(), map.get("compareUser.town").toString(), map.get("compareUser.plz").toString());
+                    u.setId(map.get("id(compareUser)").toString());
+                    output.add(u);
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                System.out.println("Error in loading data.");
+            }
+
+
+        }
+
+        return output;
+    }
+
+    public ObservableList<User> findSimilarUsersToActiveUserL2() {
+        ObservableList<User> output = FXCollections.observableArrayList();
+        try (Session session = driver.session()) {
+            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result user = transaction.run("MATCH (activeUser:User)-[:has_skill]->(s:Skill)<-[:has_skill]-(compareUser:User)\n" +
+                            "MATCH (activeUser:User)-[:likes]->(j:Job)<-[:likes]-(compareUser:User)\n" +
+                            "WHERE id(activeUser)="+Main.activeUser.getId()+"\n" +
+                            "RETURN id(compareUser), compareUser.country, compareUser.email, compareUser.firstname, compareUser.gender, compareUser.lastname, compareUser.password, compareUser.plz, compareUser.town, compareUser.username");
+                    return hilfsMethodeSimilarUserL2(transaction);
+                }
+            });
+
+            try {
+                for (Record item : puffer) {
+                    Map<String, Object> map = item.asMap();
+                    User u = new User(map.get("compareUser.username").toString(), map.get("compareUser.email").toString(), map.get("compareUser.password").toString(), map.get("compareUser.firstname").toString(), map.get("compareUser.lastname").toString(), map.get("compareUser.gender").toString(), map.get("compareUser.country").toString(), map.get("compareUser.town").toString(), map.get("compareUser.plz").toString());
+                    u.setId(map.get("id(compareUser)").toString());
+                    output.add(u);
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                System.out.println("Error in loading data.");
+            }
+
+
+        }
+
+        return output;
+    }
+
     public void readLikedJobs() {
         Main.likedJobList.removeAll(Main.likedJobList);
 
@@ -513,6 +716,39 @@ public class neoDB implements AutoCloseable {
         }
     }
 
+    public ObservableList<Job> readLikedJobsWithReturn(User inputuser) {
+    ObservableList<Job> output = FXCollections.observableArrayList();
+
+        try (Session session = driver.session()) {
+            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result job = transaction.run("MATCH(u:User)-[l:likes]->(j:Job)\n" +
+                            "WHERE u.username='" + inputuser.getUsername() + "'\n" +
+                            "RETURN id(j), j.jobtitle, j.company, j.keywords, j.likes, j.location, j.salary, j.experience, j.jobdescription");
+                    return hilfsMethodeJobsLiked2(transaction, inputuser);
+                }
+            });
+
+            try {
+                for (Record item : puffer) {
+
+                    Map<String, Object> map = item.asMap();
+                    String ratingS = map.get("j.likes").toString();
+                    int likes = Integer.parseInt(ratingS);
+                    Job j = new Job(map.get("j.jobtitle").toString(), map.get("j.company").toString(), map.get("j.location").toString(), map.get("j.experience").toString(), map.get("j.salary").toString(), map.get("j.jobdescription").toString(), likes);
+                    j.setJobid(map.get("id(j)").toString());
+                    j.setKeywords(map.get("j.keywords").toString().split(", "));
+                    output.add(j);
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                System.out.println("Error in loading data.");
+            }
+        }
+        return output;
+    }
+
 
 
     public void readUserSkills() {
@@ -536,6 +772,29 @@ public class neoDB implements AutoCloseable {
 
 
         }
+    }
+
+    public ObservableList<Skill> readUserSkillsWithReturn(User user) {
+        ObservableList<Skill> output = FXCollections.observableArrayList();
+        try (Session session = driver.session()) {
+            List<Record> puffer = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    Result result = transaction.run("MATCH(u:User{username:'"+user.getUsername()+"'})-[r:has_skill]->(s:Skill)\n" +
+                            "RETURN s.skillname, s.skilldescription");
+                    return hilfsMethodeUserSkills(transaction);
+                }
+            });
+
+            for (Record item : puffer) {
+                Map<String, Object> map = item.asMap();
+                Skill s = new Skill((String) map.get("s.skillname"), (String) map.get("s.skilldescription"));
+                output.add(s);
+            }
+
+
+        }
+        return output;
     }
 
     /**
@@ -726,10 +985,6 @@ public class neoDB implements AutoCloseable {
     }
 
 
-    //TODO: Create User -> Skill relationships randomly.
-
-
-    //TODO: Find similar user.
 
 
 }

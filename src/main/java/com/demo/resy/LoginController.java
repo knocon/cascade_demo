@@ -42,6 +42,7 @@ public class LoginController {
             activeUser.setUsername(username_string);
             activeUser.setEmail(email_string);
             activeUser.setPassword(password_string);
+            neoDbObject.refreshActiveUser();
             Main.setLogStatus(true);
 
             Stage stage = (Stage) login_button.getScene().getWindow();

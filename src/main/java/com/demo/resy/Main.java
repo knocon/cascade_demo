@@ -58,9 +58,6 @@ public class Main extends Application {
 
     public static void main(String[] args) throws SQLException, IOException {
         System.out.println("Java-FX Launch pending...");
-/*        neoDbObject.readUsers();
-        neoDbObject.readSkills();
-        neoDbObject.assignRandomSkillsToUsers();*/
         launch();
         System.out.println("Java-FX exit.");
     }

@@ -195,7 +195,7 @@ public class AnythingController implements Initializable {
                 /**
                  * generate list of top rated jobs.
                  */
-                if(job.getLikes() == ratings[0] || job.getLikes() == ratings[1] || job.getLikes() == ratings[2] ){
+                if(job.getLikes() == ratings[0] || job.getLikes() == ratings[1] || job.getLikes() == ratings[2] || job.getLikes() == ratings[3] || job.getLikes() == ratings[4] || job.getLikes() == ratings[5] || job.getLikes() == ratings[6] || job.getLikes() == ratings[7] || job.getLikes() == ratings[8] || job.getLikes() == ratings[9]){
                     job.setDebugcode("NPR");
                     bestJobs.add(job);
                 }
