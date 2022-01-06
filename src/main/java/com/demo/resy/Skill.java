@@ -22,7 +22,6 @@ public class Skill {
     }
 
 
-
     public Skill(String skillname, String description) {
         this.skillname = skillname;
         this.description = description;

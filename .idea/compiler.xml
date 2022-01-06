@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="resy_demo" target="16" />
+      <module name="resy_demo" target="9" />
     </bytecodeTargetLevel>
   </component>
 </project>

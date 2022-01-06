@@ -83,8 +83,8 @@ public class neoDB implements AutoCloseable {
      * @return List<Record>
      */
     private static List<Record> hilfsMethode(Transaction tx) {
-        return tx.run("MATCH(n:User{username:'"+Main.activeUser.getUsername()+"'})\n" +
-                "RETURN id(n), n.country, n.firstname, n.password, n.town, n.gender, n.update, n.email, n.plz, n.lastname, n.username").list();
+        return tx.run("MATCH(n:Skill)\n" +
+                "RETURN id(n), n.skillname, n.skilldescription").list();
     }
 
     private static List<Record> hilfsMethodeRefreshUser(Transaction tx) {
@@ -387,23 +387,6 @@ public class neoDB implements AutoCloseable {
 
         }
 
-    }
-    /**
-     * DEAD FUNCTION
-     * @param input
-     */
-    public String returnList(ObservableList<String> input){
-        String outputstring = "";
-        int size = input.size();
-        for(int i=0;i<size;i++) {
-            if(i<size-1)outputstring+="'"+input.get(i)+"', ";
-            else outputstring+="'"+input.get(i)+"'";
-
-
-
-        }
-
-        return outputstring;
     }
 
     /**

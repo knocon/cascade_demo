@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -22,7 +21,6 @@
             <TableColumn fx:id="debugcode" editable="false" prefWidth="75.0" resizable="false" style="-fx-cell-size: 50px;" text="debugcode" />
         </columns>
       </TableView>
-      <TextField fx:id="filter" layoutX="14.0" layoutY="51.0" prefHeight="25.0" prefWidth="249.0" promptText="filter job results" />
       <Button fx:id="dislikeButton" layoutX="1163.0" layoutY="50.0" mnemonicParsing="false" onMouseClicked="#dislikeJob" text="Dislike">
          <font>
             <Font name="System Bold" size="12.0" />
@@ -38,10 +36,6 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button fx:id="refresh" disable="true" layoutX="263.0" layoutY="51.0" mnemonicParsing="false" onMouseClicked="#refresh" prefHeight="25.0" prefWidth="62.0" text="Refresh">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font></Button>
       <Label layoutX="538.0" layoutY="23.0" text="Recommendations">
          <font>
             <Font name="System Bold" size="18.0" />

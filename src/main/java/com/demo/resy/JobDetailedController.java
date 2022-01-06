@@ -1,7 +1,5 @@
 package com.demo.resy;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -65,13 +63,6 @@ public class JobDetailedController implements Initializable {
         }
     }
 
-    public ObservableList<String> marshal(ObservableList<Skill> input){
-        ObservableList<String> output = FXCollections.observableArrayList();
-        for(Skill item : input){
-            output.add(item.getSkillname());
-        }
-        return output;
-    }
 
 
 }

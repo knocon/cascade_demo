@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static com.demo.resy.Main.neoDbObject;
-
 
 public class MainController implements Initializable {
 
@@ -177,7 +175,6 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        neoDbObject.readJobs();
 
 
     }

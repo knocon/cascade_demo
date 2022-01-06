@@ -1,6 +1,5 @@
 package com.demo.resy;
 
-import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -27,41 +26,32 @@ public class JobController implements Initializable {
     private Button addButton;
 
     @FXML
-    private TableColumn<Job,String> jobtitle;
+    private TableColumn<Job, String> jobtitle;
 
     @FXML
-    private TableColumn<Job,String> company;
+    private TableColumn<Job, String> company;
 
     @FXML
     private Button delButton;
 
     @FXML
-    private TableColumn<Job,String> location;
+    private TableColumn<Job, String> location;
 
     @FXML
-    private TableColumn<Job,String> experience;
-
-    @FXML
-    private Button editButton;
-
-    @FXML
-    private Button likeButton;
-
-    @FXML
-    private Button dislikeButton;
+    private TableColumn<Job, String> experience;
 
 
     @FXML
-    private TableColumn<Job,String> salary;
+    private TableColumn<Job, String> salary;
 
     @FXML
     private TextField filter;
 
     @FXML
-    private TableColumn<Job,String> jobid_column;
+    private TableColumn<Job, String> jobid_column;
 
     @FXML
-    private TableColumn<Job,String> jobdescription;
+    private TableColumn<Job, String> jobdescription;
 
     @FXML
     private TableView<Job> jobs_table;
@@ -69,12 +59,6 @@ public class JobController implements Initializable {
     @FXML
     private TableColumn<Job, Integer> likes;
 
-
-
-
-
-    @FXML
-    private Button refresh;
 
     @FXML
     void addJob(MouseEvent event) {
@@ -97,55 +81,12 @@ public class JobController implements Initializable {
 
     }
 
-    @FXML
-    void likeJob(MouseEvent event) {
-
-        try{
-
-            neoDbObject.likeOffer(jobs_table.getSelectionModel().getSelectedItem(), activeUser);
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmation!");
-            alert.setHeaderText("Important information!");
-            alert.setContentText("Joboffer deleted.");
-            alert.showAndWait();
-            refresh(event);
-        }catch(NullPointerException e){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Information!");
-            alert.setHeaderText("Missing information!");
-            alert.setContentText("Tupel nicht ausgewählt!");
-            alert.showAndWait();
-        }
-
-    }
-
-    @FXML
-    void dislikeJob(MouseEvent event) {
-
-        try{
-
-            neoDbObject.dislikeOffer(jobs_table.getSelectionModel().getSelectedItem(), activeUser);
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmation!");
-            alert.setHeaderText("Important information!");
-            alert.setContentText("Like deleted.");
-            alert.showAndWait();
-            refresh(event);
-        }catch(NullPointerException e){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Information!");
-            alert.setHeaderText("Missing information!");
-            alert.setContentText("Tupel nicht ausgewählt!");
-            alert.showAndWait();
-        }
-
-    }
 
     @FXML
     void delJob(MouseEvent event) {
 
 
-        try{
+        try {
 
             neoDbObject.deleteOffer(jobs_table.getSelectionModel().getSelectedItem());
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -154,7 +95,7 @@ public class JobController implements Initializable {
             alert.setContentText("Joboffer deleted.");
             alert.showAndWait();
             refresh(event);
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Information!");
             alert.setHeaderText("Missing information!");
@@ -165,17 +106,9 @@ public class JobController implements Initializable {
     }
 
     @FXML
-    private Button generate;
-
-    @FXML
     void genKey(MouseEvent event) throws IOException {
         neoDbObject.readJobs();
         neoDbObject.updateAllOffers(jobList);
-    }
-
-    @FXML
-    void editJob(MouseEvent event) {
-        //TODO: Bearbeiten ermöglichen.
     }
 
 
@@ -219,10 +152,10 @@ public class JobController implements Initializable {
         jobs_table.setItems(sortedData);
 
 
-
     }
+
     @FXML
-    void refresh(MouseEvent event){
+    void refresh(MouseEvent event) {
         neoDbObject.readJobs();
         jobid_column.setCellValueFactory(new PropertyValueFactory<Job, String>("jobid"));
         jobtitle.setCellValueFactory(new PropertyValueFactory<Job, String>("jobtitle"));

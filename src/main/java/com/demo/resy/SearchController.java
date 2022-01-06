@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Comparator;
 import java.util.ResourceBundle;
 
 import static com.demo.resy.Main.*;
@@ -67,16 +66,12 @@ public class SearchController implements Initializable {
     @FXML
     private TableColumn<Job, Integer> likes;
 
-    @FXML
-    private Button refresh;
+
 
     @FXML
     private TableColumn<Job, String> salary;
 
-    @FXML
-    void addJob(MouseEvent event) {
 
-    }
 
     @FXML
     void backToHome(MouseEvent event) throws IOException {
@@ -91,45 +86,6 @@ public class SearchController implements Initializable {
         stage.show();
     }
 
-    @FXML
-    void editJob(MouseEvent event) {
-
-    }
-
-    @FXML
-    void refresh(MouseEvent event) {
-        try {
-            bestJobs.removeAll(bestJobs);
-            neoDbObject.readJobs();
-            jobtitle.setCellValueFactory(new PropertyValueFactory<Job, String>("jobtitle"));
-            company.setCellValueFactory(new PropertyValueFactory<Job, String>("company"));
-            this.location.setCellValueFactory(new PropertyValueFactory<Job, String>("location"));
-            experience.setCellValueFactory(new PropertyValueFactory<Job, String>("experience"));
-            jobdescription.setCellValueFactory(new PropertyValueFactory<Job, String>("jobdescription"));
-            salary.setCellValueFactory(new PropertyValueFactory<Job, String>("salary"));
-            likes.setCellValueFactory(new PropertyValueFactory<Job, Integer>("likes"));
-            debugcode.setCellValueFactory(new PropertyValueFactory<Job, String>("debugcode"));
-            jobs_table.setFixedCellSize(57);
-
-            jobList.sort(Comparator.comparing(Job::getLikes));
-            int bestrating = jobList.get(jobList.size()-1).getLikes();
-            int secondbestrating = jobList.get(jobList.size()-2).getLikes();
-            for(Job job: jobList){
-                /**
-                 * generate list of top rated jobs.
-                 */
-                if(job.getLikes() == bestrating || job.getLikes() == secondbestrating){
-                    job.setDebugcode("NPR");
-                    bestJobs.add(job);
-                }
-            }
-            System.out.println("Results finished.");
-            jobs_table.setItems(bestJobs);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     void likeJob(MouseEvent event) {
@@ -142,7 +98,6 @@ public class SearchController implements Initializable {
             alert.setHeaderText("Important information!");
             alert.setContentText("Joboffer deleted.");
             alert.showAndWait();
-            refresh(event);
         }catch(NullPointerException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Information!");
@@ -164,7 +119,6 @@ public class SearchController implements Initializable {
             alert.setHeaderText("Important information!");
             alert.setContentText("Like deleted.");
             alert.showAndWait();
-            refresh(event);
         }catch(NullPointerException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Information!");
@@ -200,13 +154,6 @@ public class SearchController implements Initializable {
 
     }
 
-    public ObservableList<String> marshal(ObservableList<Skill> input){
-        ObservableList<String> output = FXCollections.observableArrayList();
-        for(Skill item : input){
-            output.add(item.getSkillname());
-        }
-        return output;
-    }
 
     /**
      *

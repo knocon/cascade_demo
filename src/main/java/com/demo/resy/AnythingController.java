@@ -1,6 +1,5 @@
 package com.demo.resy;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -209,14 +208,6 @@ public class AnythingController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public ObservableList<String> marshal(ObservableList<Skill> input){
-        ObservableList<String> output = FXCollections.observableArrayList();
-        for(Skill item : input){
-            output.add(item.getSkillname());
-        }
-        return output;
     }
 
     public int[] calculateRatings(ObservableList<Job> input){

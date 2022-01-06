@@ -11,7 +11,6 @@ import org.neo4j.driver.Config;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 
 public class Main extends Application {
@@ -27,9 +26,7 @@ public class Main extends Application {
     public static ObservableList<Job> jobList = FXCollections.observableArrayList();
     public static ObservableList<Job> likedJobList = FXCollections.observableArrayList();
     public static ObservableList<Job> bestJobs = FXCollections.observableArrayList();
-    public static ObservableList<Job> recJobs = FXCollections.observableArrayList();
-    public static ObservableList<String> skillCategorys = FXCollections.observableArrayList();
-    public static ArrayList<String> keywords = new ArrayList<>();
+
 
 
     public static boolean isLogStatus() {
@@ -51,8 +48,6 @@ public class Main extends Application {
         stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
         stage.setResizable(false);
         stage.show();
-
-
     }
 
 
