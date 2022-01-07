@@ -25,7 +25,7 @@
          </image>
       </ImageView>
       <Separator layoutX="208.0" layoutY="6.0" orientation="VERTICAL" prefHeight="71.0" prefWidth="3.0" />
-      <ImageView fx:id="cascade_logo" fitHeight="81.0" fitWidth="262.0" layoutX="480.0" layoutY="219.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="cascade_logo" fitHeight="93.0" fitWidth="300.0" layoutX="467.0" layoutY="212.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@ca2.png" />
          </image>

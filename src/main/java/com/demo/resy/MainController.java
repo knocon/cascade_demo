@@ -63,7 +63,7 @@ public class MainController implements Initializable {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
-            stage.setTitle("Cascade - Login");
+            stage.setTitle("RESY - Login");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();
@@ -84,7 +84,7 @@ public class MainController implements Initializable {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
-            stage.setTitle("Cascade - Registrierung");
+            stage.setTitle("RESY - Registrierung");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();
@@ -105,14 +105,11 @@ public class MainController implements Initializable {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
-            stage.setTitle("Cascade - Kontoeinstellungen");
+            stage.setTitle("RESY - Kontoeinstellungen");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             KontoController kontoController = fxmlLoader.getController();
             kontoController.setLogStatusText();
-            kontoController.setEmail();
-            kontoController.setUsername();
-            kontoController.setPasswordField();
             stage.show();
 
 
@@ -132,7 +129,7 @@ public class MainController implements Initializable {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
-            stage.setTitle("Cascade - Jobverwaltung");
+            stage.setTitle("RESY - Jobverwaltung");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();

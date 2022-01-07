@@ -168,10 +168,8 @@ public class SearchController implements Initializable {
         ObservableList<Job> results = FXCollections.observableArrayList();      //can be used to remove duplicates
         ObservableList<User> similarUsersl1 = FXCollections.observableArrayList();// LEVEL 1
         similarUsersl1.addAll(neoDbObject.findSimilarUsersToActiveUserBySkills());        //holds all similar users to active user.
-
         ObservableList<User> similarUsersl2 = FXCollections.observableArrayList();// LEVEL 2
         similarUsersl2.addAll(neoDbObject.findSimilarUsersToActiveUserL2());        //holds all similar users to active user.
-
         int cb =0;
         int cfl1 =0;
         int cfl2 =0;

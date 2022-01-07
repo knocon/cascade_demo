@@ -67,8 +67,8 @@ public class JobController implements Initializable {
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.getIcons().add(new Image("file:C:\\Users\\Anwender\\IdeaProjects\\resy_demo\\src\\main\\resources\\com\\demo\\resy\\ca.png"));
-            stage.setTitle("Cascade - Job hinzufügen");
+            stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
+            stage.setTitle("RESY - Job hinzufügen");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();

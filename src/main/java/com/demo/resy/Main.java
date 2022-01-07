@@ -43,7 +43,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("home.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1234, 671);
-        stage.setTitle("Cascade - Wissensgraph-basierendes Empfehlungssystem");
+        stage.setTitle("RESY - Wissensgraph-basierendes Empfehlungssystem");
         stage.setScene(scene);
         stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
         stage.setResizable(false);

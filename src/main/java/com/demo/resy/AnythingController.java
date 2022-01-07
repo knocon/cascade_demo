@@ -133,7 +133,7 @@ public class AnythingController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation!");
             alert.setHeaderText("Important information!");
-            alert.setContentText("Joboffer deleted.");
+            alert.setContentText("Liked job.");
             alert.showAndWait();
             refresh(event);
         }catch(NullPointerException e){
