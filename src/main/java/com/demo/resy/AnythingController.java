@@ -200,6 +200,7 @@ public class AnythingController implements Initializable {
                 }
             }
             System.out.println("Results finished.");
+            System.out.println("Non-personalized recommendations:"+bestJobs.size());
 
             jobs_table.setItems(bestJobs);
             likes.setSortType(TableColumn.SortType.DESCENDING);

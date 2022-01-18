@@ -108,6 +108,14 @@ public class Job implements Comparator<Job> {
         return keywords;
     }
 
+    public String getKeywordsString() {
+        String output = "";
+        for(int i=0; i< keywords.length;i++){
+            output+=keywords[i];
+        }
+        return output;
+    }
+
     public void setKeywords(String[] keywords) {
         this.keywords = keywords;
     }
