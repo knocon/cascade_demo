@@ -84,7 +84,7 @@ public class MainController implements Initializable {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
-            stage.setTitle("RESY - Registrierung");
+            stage.setTitle("RESY - Register");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();
@@ -105,7 +105,7 @@ public class MainController implements Initializable {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
-            stage.setTitle("RESY - Kontoeinstellungen");
+            stage.setTitle("RESY - Accountsettings");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             KontoController kontoController = fxmlLoader.getController();
@@ -129,7 +129,7 @@ public class MainController implements Initializable {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
-            stage.setTitle("RESY - Jobverwaltung");
+            stage.setTitle("RESY - Jobmanagement");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();

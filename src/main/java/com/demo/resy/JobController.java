@@ -68,7 +68,7 @@ public class JobController implements Initializable {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
-            stage.setTitle("RESY - Job hinzufügen");
+            stage.setTitle("RESY - Add Job");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();

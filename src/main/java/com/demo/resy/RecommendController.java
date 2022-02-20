@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 import static com.demo.resy.Main.*;
 
-public class SearchController implements Initializable {
+public class RecommendController implements Initializable {
 
     private  Stage stage;
     private  Scene scene;
@@ -96,7 +96,7 @@ public class SearchController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation!");
             alert.setHeaderText("Important information!");
-            alert.setContentText("Joboffer deleted.");
+            alert.setContentText("Joboffer liked.");
             alert.showAndWait();
         }catch(NullPointerException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -173,7 +173,7 @@ public class SearchController implements Initializable {
         int cb =0;
         int cfl1 =0;
         int cfl2 =0;
-        double sharpness = 0.55;
+        double sharpness = 0.60;
         /**
          * CB-Recommendation based on liked jobs. Independant of skill-set.
          */
@@ -255,7 +255,7 @@ public class SearchController implements Initializable {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.getIcons().add(new Image("file:src/main/resources/com/demo/resy/ca.png"));
-            stage.setTitle("Cascade - Job");
+            stage.setTitle("RESY - Job");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();

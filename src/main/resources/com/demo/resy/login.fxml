@@ -10,7 +10,7 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.demo.resy.LoginController">
    <children>
       <Button fx:id="login_button" layoutX="213.0" layoutY="319.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="35.0" prefWidth="175.0" style="-fx-background-color: #004e9b;" text="Log in" textFill="WHITE" />
-      <TextField fx:id="email" layoutX="213.0" layoutY="195.0" prefHeight="35.0" prefWidth="175.0" promptText="max.mustermann@cascade.de" text="batest@knocon.de" />
+      <TextField fx:id="email" layoutX="213.0" layoutY="195.0" prefHeight="35.0" prefWidth="175.0" promptText="max.mustermann@resy.de" text="batest@knocon.de" />
       <PasswordField fx:id="password" layoutX="213.0" layoutY="263.0" prefHeight="35.0" prefWidth="175.0" text="BA_Test" />
       <Label layoutX="213.0" layoutY="178.0" text="E-Mail">
          <font>

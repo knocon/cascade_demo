@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="671.0" prefWidth="1234.0" xmlns="http://javafx.com/javafx/17" fx:controller="com.demo.resy.SearchController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="671.0" prefWidth="1234.0" xmlns="http://javafx.com/javafx/17" fx:controller="com.demo.resy.RecommendController">
    <children>
       <TableView fx:id="jobs_table" editable="true" layoutX="14.0" layoutY="76.0" prefHeight="582.0" prefWidth="1203.0" tableMenuButtonVisible="true">
         <columns>

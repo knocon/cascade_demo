@@ -9,10 +9,10 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="671.0" prefWidth="1234.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.demo.resy.MainController">
    <children>
       <Button fx:id="registrieren_button" layoutX="1146.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#popup_register" prefHeight="25.0" prefWidth="72.0" text="Register" />
-    <Button fx:id="anmelden_button" layoutX="1069.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#popup_login" prefHeight="25.0" prefWidth="72.0" text="Log in" />
+    <Button fx:id="anmelden_button" layoutX="1069.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#popup_login" prefHeight="25.0" prefWidth="72.0" text="Log-In" />
       <Button fx:id="suchen_button" layoutX="622.0" layoutY="310.0" mnemonicParsing="false" onMouseClicked="#generateTops" prefHeight="39.0" prefWidth="123.0" style="-fx-background-color: #004e9b;" text="Anything!" textFill="WHITE" />
-      <Button fx:id="suchen_button1" layoutX="489.0" layoutY="310.0" mnemonicParsing="false" onMouseClicked="#generateRecs" prefHeight="39.0" prefWidth="123.0" style="-fx-background-color: #004e9b;" text="Search!" textFill="WHITE" />
-      <Button fx:id="kontoeinstellungen" layoutX="1069.0" layoutY="39.0" mnemonicParsing="false" onMouseClicked="#popup_konto" prefHeight="25.0" prefWidth="150.0" text="Kontoeinstellungen" />
+      <Button fx:id="suchen_button1" layoutX="489.0" layoutY="310.0" mnemonicParsing="false" onMouseClicked="#generateRecs" prefHeight="39.0" prefWidth="123.0" style="-fx-background-color: #004e9b;" text="Recommend!" textFill="WHITE" />
+      <Button fx:id="kontoeinstellungen" layoutX="1069.0" layoutY="39.0" mnemonicParsing="false" onMouseClicked="#popup_konto" prefHeight="25.0" prefWidth="150.0" text="Accountsettings" />
       <ImageView fx:id="imageView" fitHeight="54.0" fitWidth="186.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@us_logo.png" />

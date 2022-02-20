@@ -63,7 +63,7 @@ public class KontoController implements Initializable {
     }
 
     public void setLogStatusText() {
-        logStatusText.setText("Sie sind eingeloggt als: \n" + Main.activeUser.getUsername() + "\n" + Main.activeUser.getEmail() + "\n");
+        logStatusText.setText("Logged in as: \n" + Main.activeUser.getUsername() + "\n" + Main.activeUser.getEmail() + "\n");
     }
 
     public void setPasswordField() {

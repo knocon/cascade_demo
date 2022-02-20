@@ -95,6 +95,11 @@ public class RegisterController implements Initializable {
                 try {
                     neoDbObject.registerUser(newUser);
                     System.out.print("STATUS neoDB: new User created.");
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmation!");
+                    alert.setHeaderText("Important information!");
+                    alert.setContentText("User created.");
+                    alert.showAndWait();
                 } catch (ClientException ce) {
                     System.out.print("STATUS neoDB: new User NOT created.");
                 }

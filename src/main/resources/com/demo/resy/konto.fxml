@@ -11,21 +11,21 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="671.0" prefWidth="969.0" xmlns="http://javafx.com/javafx/17" fx:controller="com.demo.resy.KontoController">
    <children>
-      <Text fx:id="logStatusText" layoutX="32.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sie sind eingeloggt als:" />
+      <Text fx:id="logStatusText" layoutX="32.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Logged in as:" />
       <TableView fx:id="skills_table" layoutX="201.0" layoutY="47.0" prefHeight="364.0" prefWidth="745.0">
         <columns>
           <TableColumn fx:id="skills_column" editable="false" prefWidth="248.0" resizable="false" text="Skillname" />
-            <TableColumn fx:id="description_column" editable="false" prefWidth="496.0" resizable="false" text="Beschreibung" />
+            <TableColumn fx:id="description_column" editable="false" prefWidth="496.0" resizable="false" text="Description" />
         </columns>
       </TableView>
       <Separator layoutX="177.0" layoutY="4.0" orientation="VERTICAL" prefHeight="665.0" prefWidth="5.0" />
-      <TextField fx:id="filter" layoutX="201.0" layoutY="21.0" prefHeight="25.0" prefWidth="249.0" promptText="Tabelle filtern nach Skillnamen" />
-      <Button fx:id="addButton" layoutX="864.0" layoutY="20.0" mnemonicParsing="false" onMouseClicked="#addSkill" style="-fx-background-color: #99ff99;" text="Hinzufügen">
+      <TextField fx:id="filter" layoutX="201.0" layoutY="21.0" prefHeight="25.0" prefWidth="249.0" promptText="Filter after skillname" />
+      <Button fx:id="addButton" layoutX="906.0" layoutY="20.0" mnemonicParsing="false" onMouseClicked="#addSkill" style="-fx-background-color: #99ff99;" text="Add">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button fx:id="delButton" layoutX="884.0" layoutY="428.0" mnemonicParsing="false" onMouseClicked="#delSkill" style="-fx-background-color: ff9999;" text="Löschen">
+      <Button fx:id="delButton" layoutX="893.0" layoutY="429.0" mnemonicParsing="false" onMouseClicked="#delSkill" style="-fx-background-color: ff9999;" text="Delete">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -33,9 +33,9 @@
       <TableView fx:id="skillsuser_table" layoutX="201.0" layoutY="455.0" prefHeight="207.0" prefWidth="745.0">
          <columns>
             <TableColumn fx:id="skills_column2" editable="false" prefWidth="248.0" resizable="false" text="Skillname" />
-            <TableColumn fx:id="description_column2" editable="false" prefWidth="496.0" resizable="false" text="Beschreibung" />
+            <TableColumn fx:id="description_column2" editable="false" prefWidth="496.0" resizable="false" text="Description" />
          </columns>
       </TableView>
-      <TextField fx:id="filter2" layoutX="201.0" layoutY="429.0" prefHeight="25.0" prefWidth="249.0" promptText="Tabelle filtern nach Skillnamen" />
+      <TextField fx:id="filter2" layoutX="201.0" layoutY="429.0" prefHeight="25.0" prefWidth="249.0" promptText="Filter after skillname" />
    </children>
 </AnchorPane>
