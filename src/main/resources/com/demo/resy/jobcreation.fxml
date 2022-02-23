@@ -15,7 +15,7 @@
       <TextField fx:id="experience" layoutX="21.0" layoutY="218.0" promptText="experience" text="4-9 Years" />
       <TextField fx:id="salary" layoutX="20.0" layoutY="268.0" promptText="salary" text="450000-650000" />
       <TextArea fx:id="description" layoutX="178.0" layoutY="72.0" prefHeight="289.0" prefWidth="754.0" promptText="Job-Beschreibung" text="Warm Greetings...&#10;We have an opportunity for Bachelor of Engineering Location:- China&#10;Experience :-6-15yrs&#10;Industry:- Automation Industry&#10;Location:- China&#10;Education:- B.E/ B.tech&#10;Description of Role:-&#10;1. Mechanical Engineer&#10;2. Electrical Engineer&#10;3. Product Engineer&#10;4. Injection molding Operator&#10;5. Customer service Engineer&#10;6. Stamping Die Assembly&#10;7. Electrical Switchgear Assemblies&#10;8. Pining&#10;Interested candidates please update your resume everwinhr100@ gmail.com, If you have any queries please contact : 8939853067 contact person : Rajesh" />
-      <Button fx:id="create" defaultButton="true" layoutX="20.0" layoutY="306.0" mnemonicParsing="false" onMouseClicked="#createOffer" prefHeight="55.0" prefWidth="149.0" text="Erstellen" />
+      <Button fx:id="create" defaultButton="true" layoutX="20.0" layoutY="306.0" mnemonicParsing="false" onMouseClicked="#createOffer" prefHeight="55.0" prefWidth="149.0" text="Create Offer" />
       <Label layoutX="21.0" layoutY="61.0" text="Jobtitle">
          <font>
             <Font name="System Bold" size="12.0" />
